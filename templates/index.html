@@ -67,6 +67,11 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                     <div class="flex items-center space-x-2">
+                        <div class="flex items-center space-x-2">
+               
+
+               
+
                         <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
@@ -87,18 +92,28 @@
                     </a>
                 </nav>
                 <div class="flex items-center space-x-3">
-                    <button class="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM9 7H4l5-5v5zm6 10V7a1 1 0 00-1-1H5a1 1 0 00-1 1v10a1 1 0 001 1h9a1 1 0 001-1z"></path>
-                        </svg>
+                      <!-- Blue Info Button -->
+  <button
+    title="About this Portal"
+    class="p-1 rounded-full hover:bg-blue-100 transition"
+    onclick="window.location.href='/docs'">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="#1976D2">
+      <path d="M0 0h24v24H0z" fill="none"/>
+      <path d="M11 17h2v-6h-2v6zm0-8h2V7h-2v2zm1-7
+        C6.48 2 2 6.48 2 12s4.48 10 10 10
+        10-4.48 10-10S17.52 2 12 2zm0 18
+        c-4.41 0-8-3.59-8-8s3.59-8 8-8
+        8 3.59 8 8-3.59 8-8 8z"/>
+    </svg>
+  </button>
+
+  <!-- User Avatar and Name -->
+  <img src="https://source.unsplash.com/40x40/?person" class="w-8 h-8 rounded-full" />
+  <span class="text-gray-700 font-medium">User</span>
+</div>
+                   
                     </button>
-                    <div class="flex items-center space-x-2">
-                        <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-                            </svg>
-                        </div>
-                        <span class="text-sm text-gray-700">User</span>
+                    
                     </div>
                 </div>
             </div>

@@ -390,7 +390,12 @@ def validate_form_data(form_data):
             errors.append(f'{field.replace("_", " ").title()} is required')
     
     return errors
-
+@app.route("/docs")
+def docs():
+    return render_template("docs.html")
+@app.route("/")
+def index():
+    return render_template("index.html")
 @app.errorhandler(RequestEntityTooLarge)
 def handle_file_too_large(e):
     return jsonify(error="File too large. Maximum size is 50MB."), 413
@@ -445,6 +450,7 @@ def home():
                              articles=[],
                              news_metrics={},
                              trend_data=[])
+
 
 @app.route('/ai')
 def ai_voice_ui():
