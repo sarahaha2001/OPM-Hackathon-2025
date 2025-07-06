@@ -395,7 +395,9 @@ def docs():
     return render_template("docs.html")
 @app.route("/")
 def index():
-    return render_template("index.html")
+    dummy_metrics = {}  # or populate it with real data
+    return render_template("index.html", metrics=dummy_metrics)
+
 @app.errorhandler(RequestEntityTooLarge)
 def handle_file_too_large(e):
     return jsonify(error="File too large. Maximum size is 50MB."), 413
