@@ -1,0 +1,198 @@
+{
+  "processed_at": "2025-07-05T17:28:10.739999",
+  "total_articles": 118,
+  "processed_articles": 10,
+  "dashboard_summary": "Good morning, everyone. Our recent workplace safety performance is unacceptable. We've seen a spike in incidents, particularly within our construction operations, resulting in significant financial penalties. We need to take immediate action to reverse this trend.\n\nOur primary concerns revolve around the high number of high-risk incidents. The frequency of near misses and the severity of potential injuries are alarming. It appears there is a lack of adherence to safety protocols and potentially inadequate training at some of our construction sites. The fact that all incidents occurred in construction requires us to analyse working practices.\n\nI strongly recommend that each of you immediately initiate a comprehensive review of safety procedures on your respective sites. This should include a full safety audit, refresher training for all personnel, and a renewed emphasis on hazard identification and risk mitigation. We must get to the root cause of these incidents and ensure a safe working environment for all employees.",
+  "articles": [
+    {
+      "id": "0",
+      "title": "Firm fined after apprentice severed thumb in hotel build",
+      "url": "https://www.constructionnews.co.uk/health-and-safety/firm-fined-after-apprentice-severed-thumb-in-hotel-build-04-07-2025/",
+      "source": "constructionnews",
+      "content": "A construction firm has been fined £40,000 after an apprentice joiner had his thumb severed off by a rotating blade. The teenage apprentice was working for 3B Construction when the incident happened during the conversion of a 19th century hunting lodge into a luxury hotel in the Highlands. At the time of the incident on 8 June 2021, the apprentice, who had been with the company for six months, was using a portable table saw to cut plasterboard during the project at Hope Lodge in Tongue. His hand came into contact with the saw blade when he went to flick away material on it and the blade cut through his thumb. He was taken to Raigmore Hospital in Inverness and underwent surgery where doctors managed to reattach his thumb. The Health and Safety Executive (HSE) said he still has long term complications as a result of the incident. \"He believes his thumb is working to around 70 per cent of what it used to be, and it has healed as much as it can,\" they said. \"It is shorter than his other thumb, he can’t bend it fully and it is permanently swollen. In winter he suffers significant discomfort when the thumb becomes stiff and sore.\" However, the man has since resumed his apprenticeship with another firm. The HSE said the 3B Construction was been fined £40,000 at Tain Sheriff Court. During its investigation the health and safety watchdog found that 3B Construction failed to: undertake a suitable and sufficient assessment of the risks to employees operating a table circular saw, ensure that the system of work for the operation of said saw was safe and appropriately supervised, provided the apprentice joiners with the information, instruction and training needed to operate said saw safely. The HSE said 3B Construction Limited, of Cassillis Business Park, Minishant Ayr, pleaded guilty to Section 2(1) and Section 33(1)(a) of the Health and Safety at Work Act 1974. HSE inspector Norman Schouten said: “While this young man continues to live with the trauma and impact of this incident, it’s greatly encouraging to see him continuing to work as a joiner. “However, it is only the efforts of medical professionals that prevented this from becoming a permanent amputation following the failures of the company. “Companies and individuals should be aware that HSE will not hesitate to take appropriate enforcement action against those that fall below the required standards.” 2025-07-04 Nicola Harley Share Facebook Twitter LinkedIn Email Add to Bookmarks",
+      "scraped_at": "2025-07-05T16:56:56.534190",
+      "gemini_summary": {
+        "type": "Injury",
+        "severity": "High",
+        "industry": "Construction",
+        "company": "3B Construction",
+        "location": "Hope Lodge, Tongue, Highlands",
+        "summary": "An apprentice joiner had his thumb severed by a table saw due to inadequate risk assessment, supervision, and training provided by 3B Construction. The company was fined after the incident resulted in long-term complications for the apprentice, despite successful reattachment surgery.",
+        "fine": "£40000",
+        "lesson": "Construction firms must ensure adequate risk assessments, supervision, and training are provided to employees, especially apprentices, when operating hazardous machinery like table saws to prevent serious injuries."
+      },
+      "processed_at": "2025-07-05T17:27:45.526488"
+    },
+    {
+      "id": "1",
+      "title": "Liquidated firm ‘showed blatant disregard’ for fire safety",
+      "url": "https://www.constructionnews.co.uk/health-and-safety/liquidated-firm-showed-blatant-disregard-for-fire-safety-03-07-2025/",
+      "source": "constructionnews",
+      "content": "Liquidated firm ‘showed blatant disregard’ for fire safety 03 Jul 2025 By Ian Weinfass Digital Edition: Liquidated firm ‘showed blatant disregard’ for fire safety A developer that went into liquidation less than three months ago has been given a fine over repeated fire safety breaches related to construction work. Glovers Court was handed a £165,000 fine after being found guilty of four offences committed while turning a former warehouse… > You have read 1 of 1 free-access articles allowed for 30 - days. For further access please register or log in . Welcome! To continue reading either: Access your account Log in to your account to access your content on Construction News. Log in Get unlimited access Subscribe today to ensure you keep up to date with the latest client and contractor news, and interviews with industry leaders. Premium subscribers gain access to dynamic data dashboards covering material prices, workforce trends, construction activity, and top contractor statistics (turnover, cash flow, and employee count). Find out more Start a FREE trial Get limited access for 2 weeks. No further commitment, no payment details required. Access to Premium content not included in trial. Try us! Subscribe for unlimited access Full access to constructionnews.co.uk The latest client and contractor news Interviews with Industry Leaders Market data, Industry Trend and Forecasts Access to the CN digital archive Exclusive daily and weekly newsletters Subscribe Register for guest access Two-week unrestricted access to www.constructionnews.co.uk Digital issue archive during your trial Exclusive daily and weekly newsletters Register > Already have an account, click here to sign in Check if you already have access from your company or university",
+      "scraped_at": "2025-07-05T16:56:56.534190",
+      "gemini_summary": {
+        "type": "Fine",
+        "severity": "High",
+        "industry": "Construction",
+        "company": "Glovers Court",
+        "location": "Unknown",
+        "summary": "Glovers Court was fined £165,000 for repeated fire safety breaches related to construction work while converting a former warehouse. The company showed a blatant disregard for fire safety.",
+        "fine": "£165,000",
+        "lesson": "Companies must adhere to fire safety regulations during construction and conversion projects to protect workers and prevent property damage."
+      },
+      "processed_at": "2025-07-05T17:27:47.900513"
+    },
+    {
+      "id": "2",
+      "title": "Construction accounts for more than a quarter of workplace deaths",
+      "url": "https://www.constructionnews.co.uk/health-and-safety/construction-accounts-for-more-than-a-quarter-of-workplace-deaths-03-07-2025/",
+      "source": "constructionnews",
+      "content": "Construction accounts for more than a quarter of workplace deaths 03 Jul 2025 By Nicola Harley and Ian Weinfass Digital Edition: Construction accounts for more than a quarter of workplace deaths Construction remained the sector with the highest number of workplace deaths last year, accounting for more than a quarter across all industries. New figures released by the Health and Safety Executive (HSE) show the construction industry accounted for 28 per cent of the 124 workplace… > You have read 1 of 1 free-access articles allowed for 30 - days. For further access please register or log in . Welcome! To continue reading either: Access your account Log in to your account to access your content on Construction News. Log in Get unlimited access Subscribe today to ensure you keep up to date with the latest client and contractor news, and interviews with industry leaders. Premium subscribers gain access to dynamic data dashboards covering material prices, workforce trends, construction activity, and top contractor statistics (turnover, cash flow, and employee count). Find out more Start a FREE trial Get limited access for 2 weeks. No further commitment, no payment details required. Access to Premium content not included in trial. Try us! Subscribe for unlimited access Full access to constructionnews.co.uk The latest client and contractor news Interviews with Industry Leaders Market data, Industry Trend and Forecasts Access to the CN digital archive Exclusive daily and weekly newsletters Subscribe Register for guest access Two-week unrestricted access to www.constructionnews.co.uk Digital issue archive during your trial Exclusive daily and weekly newsletters Register > Already have an account, click here to sign in Check if you already have access from your company or university",
+      "scraped_at": "2025-07-05T16:56:56.534190",
+      "gemini_summary": {
+        "type": "Fatality",
+        "severity": "Critical",
+        "industry": "Construction",
+        "company": "Unknown",
+        "location": "Unknown",
+        "summary": "Construction industry had the highest number of workplace deaths, accounting for 28% of the 124 workplace deaths last year.",
+        "fine": "None",
+        "lesson": "Construction companies must reinforce safety protocols and training to reduce fatalities."
+      },
+      "processed_at": "2025-07-05T17:27:50.016211"
+    },
+    {
+      "id": "3",
+      "title": "Demolition firm fined more than £40,000 after worker’s roof fall",
+      "url": "https://www.constructionnews.co.uk/health-and-safety/demolition-firm-fined-more-than-40000-after-workers-roof-fall-23-06-2025/",
+      "source": "constructionnews",
+      "content": "Demolition firm fined more than £40,000 after worker’s roof fall 23 Jun 2025 By Nicola Harley Digital Edition: Demolition firm fined more than £40,000 after worker’s roof fall A demolition company has been fined more than £40,000 after a worker fell six metres through a roof opening. Lawrie (Demolition) Ltd was appointed as the principal contractor to carry out the demolition of a vacant warehouse in Aberdeen when its employee suffered serious injuries… > You have read 1 of 1 free-access articles allowed for 30 - days. For further access please register or log in . Welcome! To continue reading either: Access your account Log in to your account to access your content on Construction News. Log in Get unlimited access Subscribe today to ensure you keep up to date with the latest client and contractor news, and interviews with industry leaders. Premium subscribers gain access to dynamic data dashboards covering material prices, workforce trends, construction activity, and top contractor statistics (turnover, cash flow, and employee count). Find out more Start a FREE trial Get limited access for 2 weeks. No further commitment, no payment details required. Access to Premium content not included in trial. Try us! Subscribe for unlimited access Full access to constructionnews.co.uk The latest client and contractor news Interviews with Industry Leaders Market data, Industry Trend and Forecasts Access to the CN digital archive Exclusive daily and weekly newsletters Subscribe Register for guest access Two-week unrestricted access to www.constructionnews.co.uk Digital issue archive during your trial Exclusive daily and weekly newsletters Register > Already have an account, click here to sign in Check if you already have access from your company or university",
+      "scraped_at": "2025-07-05T16:56:56.535190",
+      "gemini_summary": {
+        "type": "Fall",
+        "severity": "Critical",
+        "industry": "Construction",
+        "company": "Lawrie (Demolition) Ltd",
+        "location": "Aberdeen",
+        "summary": "A worker for Lawrie (Demolition) Ltd fell six metres through a roof opening while demolishing a warehouse. The company was fined as a result of the incident.",
+        "fine": "£40000",
+        "lesson": "Ensure adequate safety measures are in place to prevent falls from height during demolition work, including securing roof openings."
+      },
+      "processed_at": "2025-07-05T17:27:52.368276"
+    },
+    {
+      "id": "4",
+      "title": "Construction firm fined £50,000 after four injured in house collapse",
+      "url": "https://www.constructionnews.co.uk/health-and-safety/construction-firm-fined-50000-after-four-injured-in-house-collapse-23-06-2025/",
+      "source": "constructionnews",
+      "content": "Construction firm fined £50,000 after four injured in house collapse 23 Jun 2025 By Nicola Harley Digital Edition: Construction firm fined £50,000 after four injured in house collapse A construction company has been fined £50,000 after four men were injured - two seriously - when the first floor of a house collapsed during building works. The workers had been contracted by London-based Aryn Stones Ltd to build a new domestic property in Hampstead… > You have read 1 of 1 free-access articles allowed for 30 - days. For further access please register or log in . Welcome! To continue reading either: Access your account Log in to your account to access your content on Construction News. Log in Get unlimited access Subscribe today to ensure you keep up to date with the latest client and contractor news, and interviews with industry leaders. Premium subscribers gain access to dynamic data dashboards covering material prices, workforce trends, construction activity, and top contractor statistics (turnover, cash flow, and employee count). Find out more Start a FREE trial Get limited access for 2 weeks. No further commitment, no payment details required. Access to Premium content not included in trial. Try us! Subscribe for unlimited access Full access to constructionnews.co.uk The latest client and contractor news Interviews with Industry Leaders Market data, Industry Trend and Forecasts Access to the CN digital archive Exclusive daily and weekly newsletters Subscribe Register for guest access Two-week unrestricted access to www.constructionnews.co.uk Digital issue archive during your trial Exclusive daily and weekly newsletters Register > Already have an account, click here to sign in Check if you already have access from your company or university",
+      "scraped_at": "2025-07-05T16:56:56.535190",
+      "gemini_summary": {
+        "type": "Injury",
+        "severity": "High",
+        "industry": "Construction",
+        "company": "Aryn Stones Ltd",
+        "location": "Hampstead",
+        "summary": "A construction firm was fined after four workers were injured, two seriously, when the first floor of a house collapsed during building works. The incident highlights the importance of structural integrity during construction projects.",
+        "fine": "£50000",
+        "lesson": "Ensure structural stability during construction to prevent collapses and worker injuries."
+      },
+      "processed_at": "2025-07-05T17:27:54.671039"
+    },
+    {
+      "id": "5",
+      "title": "Builder fined for dumping asbestos in public car park",
+      "url": "https://www.constructionnews.co.uk/health-and-safety/builder-fined-for-dumping-asbestos-in-public-car-park-20-06-2025/",
+      "source": "constructionnews",
+      "content": "Builder fined for dumping asbestos in public car park 20 Jun 2025 By Nicola Harley Digital Edition: Builder fined for dumping asbestos in public car park A builder has been fined after admitting he dumped asbestos in a public car park. Ashley Ciminera had been replacing the roof of Harvst at Teifi Warehouse in Cardigan, Wales, in June 2023 when the material was discarded. “He dumped fragmented and broken corrugated asbestos… > You have read 1 of 1 free-access articles allowed for 30 - days. For further access please register or log in . Welcome! To continue reading either: Access your account Log in to your account to access your content on Construction News. Log in Get unlimited access Subscribe today to ensure you keep up to date with the latest client and contractor news, and interviews with industry leaders. Premium subscribers gain access to dynamic data dashboards covering material prices, workforce trends, construction activity, and top contractor statistics (turnover, cash flow, and employee count). Find out more Start a FREE trial Get limited access for 2 weeks. No further commitment, no payment details required. Access to Premium content not included in trial. Try us! Subscribe for unlimited access Full access to constructionnews.co.uk The latest client and contractor news Interviews with Industry Leaders Market data, Industry Trend and Forecasts Access to the CN digital archive Exclusive daily and weekly newsletters Subscribe Register for guest access Two-week unrestricted access to www.constructionnews.co.uk Digital issue archive during your trial Exclusive daily and weekly newsletters Register > Already have an account, click here to sign in Check if you already have access from your company or university",
+      "scraped_at": "2025-07-05T16:56:56.535190",
+      "gemini_summary": {
+        "type": "Fine",
+        "severity": "Medium",
+        "industry": "Construction",
+        "company": "Ashley Ciminera",
+        "location": "Cardigan, Wales",
+        "summary": "A builder was fined for illegally dumping asbestos in a public car park after removing it from a roof. The builder discarded fragmented and broken corrugated asbestos, posing a risk to public health.",
+        "fine": "Unknown",
+        "lesson": "Proper disposal of hazardous materials like asbestos is crucial to prevent environmental and health risks; always follow regulations for handling and disposing of such materials."
+      },
+      "processed_at": "2025-07-05T17:27:57.167016"
+    },
+    {
+      "id": "6",
+      "title": "Health and safety: In-depth",
+      "url": "https://www.constructionnews.co.uk/health-and-safety/?block_id=2",
+      "source": "constructionnews",
+      "content": "The dangers of silica dust 10 Apr 2025 Comments Off on The dangers of silica dust The mortal danger to construction workers from silica dust is getting worse Stonemason Stuart Johnson would come home from work “absolutely covered in dust”, his wife Carol recalls. “It was just part and parcel of the job.” Stuart was unaware that the dust he was inhaling – silica – could…",
+      "scraped_at": "2025-07-05T16:56:56.535190",
+      "gemini_summary": {
+        "type": "Fatality",
+        "severity": "Critical",
+        "industry": "Construction",
+        "company": "Unknown",
+        "location": "Unknown",
+        "summary": "A stonemason contracted a fatal illness from inhaling silica dust while working on construction sites. Workers need to be aware of the dangers of silica dust and take precautions.",
+        "fine": "None",
+        "lesson": "Construction workers should be educated about the dangers of silica dust and provided with adequate respiratory protection."
+      },
+      "processed_at": "2025-07-05T17:27:59.541136"
+    },
+    {
+      "id": "7",
+      "title": "Health and safety: More news",
+      "url": "https://www.constructionnews.co.uk/health-and-safety/?block_id=3",
+      "source": "constructionnews",
+      "content": "Firm fined after apprentice severed thumb in hotel build 04 Jul 2025 Leave a comment A construction firm has been fined £40,000 after an apprentice joiner had his thumb severed off by a rotating blade. The teenage apprentice was working for 3B Construction when the incident happened during the conversion of a 19th century hunting lodge into a luxury hotel in the Highlands. At the…",
+      "scraped_at": "2025-07-05T16:56:56.535190",
+      "gemini_summary": {
+        "type": "Injury",
+        "severity": "Critical",
+        "industry": "Construction",
+        "company": "3B Construction",
+        "location": "Highlands",
+        "summary": "An apprentice joiner had his thumb severed by a rotating blade while working on a hotel conversion. The construction firm was fined £40,000 following the incident.",
+        "fine": "£40000",
+        "lesson": "Ensure adequate safety measures are in place when using rotating blades, especially for inexperienced workers."
+      },
+      "processed_at": "2025-07-05T17:28:02.299784"
+    },
+    {
+      "id": "8",
+      "title": "Site supervisor fined after exposing schoolchildren to asbestos",
+      "url": "https://www.constructionnews.co.uk/health-and-safety/site-supervisor-fined-after-exposing-schoolchildren-to-asbestos-16-06-2025/",
+      "source": "constructionnews",
+      "content": "Site supervisor fined after exposing schoolchildren to asbestos 16 Jun 2025 By Nicola Harley Digital Edition: Site supervisor fined after exposing schoolchildren to asbestos A construction site supervisor has been fined £1,800 after he exposed primary school pupils and staff to asbestos during renovation work. Adrian Barraclough was working on the refurbishment of kitchen facilities at Holy Family Catholic Primary School in Bristol when the incident happened. During the… > You have read 1 of 1 free-access articles allowed for 30 - days. For further access please register or log in . Welcome! To continue reading either: Access your account Log in to your account to access your content on Construction News. Log in Get unlimited access Subscribe today to ensure you keep up to date with the latest client and contractor news, and interviews with industry leaders. Premium subscribers gain access to dynamic data dashboards covering material prices, workforce trends, construction activity, and top contractor statistics (turnover, cash flow, and employee count). Find out more Start a FREE trial Get limited access for 2 weeks. No further commitment, no payment details required. Access to Premium content not included in trial. Try us! Subscribe for unlimited access Full access to constructionnews.co.uk The latest client and contractor news Interviews with Industry Leaders Market data, Industry Trend and Forecasts Access to the CN digital archive Exclusive daily and weekly newsletters Subscribe Register for guest access Two-week unrestricted access to www.constructionnews.co.uk Digital issue archive during your trial Exclusive daily and weekly newsletters Register > Already have an account, click here to sign in Check if you already have access from your company or university",
+      "scraped_at": "2025-07-05T16:56:56.535190",
+      "gemini_summary": {
+        "type": "Fine",
+        "severity": "Medium",
+        "industry": "Construction",
+        "company": "Unknown",
+        "location": "Bristol",
+        "summary": "A construction site supervisor was fined after exposing primary school pupils and staff to asbestos during renovation work at Holy Family Catholic Primary School. The supervisor, Adrian Barraclough, was fined £1,800.",
+        "fine": "£1,800",
+        "lesson": "Ensure proper asbestos surveys and control measures are in place before commencing any renovation work, especially in areas frequented by vulnerable individuals like children."
+      },
+      "processed_at": "2025-07-05T17:28:04.707783"
+    },
+    {
+      "id": "9",
+      "title": "Scaffolding accident rate hits record low",
+      "url": "https://www.constructionnews.co.uk/health-and-safety/scaffolding-accident-rate-hits-record-low-13-06-2025/",
+      "source": "constructionnews",
+      "content": "Scaffolding accident rate hits record low 13 Jun 2025 By James Wilmore Digital Edition: Scaffolding accident rate hits record low The number of accidents involving scaffolders declined by 16 per cent last year to an all-time low, according to a sector trade body. For 2024, the National Access and Scaffolding Confederation (NASC) has reported that 73 incidents were recorded among its 303 member companies under… > You have read 1 of 1 free-access articles allowed for 30 - days. For further access please register or log in . Welcome! To continue reading either: Access your account Log in to your account to access your content on Construction News. Log in Get unlimited access Subscribe today to ensure you keep up to date with the latest client and contractor news, and interviews with industry leaders. Premium subscribers gain access to dynamic data dashboards covering material prices, workforce trends, construction activity, and top contractor statistics (turnover, cash flow, and employee count). Find out more Start a FREE trial Get limited access for 2 weeks. No further commitment, no payment details required. Access to Premium content not included in trial. Try us! Subscribe for unlimited access Full access to constructionnews.co.uk The latest client and contractor news Interviews with Industry Leaders Market data, Industry Trend and Forecasts Access to the CN digital archive Exclusive daily and weekly newsletters Subscribe Register for guest access Two-week unrestricted access to www.constructionnews.co.uk Digital issue archive during your trial Exclusive daily and weekly newsletters Register > Already have an account, click here to sign in Check if you already have access from your company or university",
+      "scraped_at": "2025-07-05T16:56:56.535190",
+      "gemini_summary": {
+        "type": "Guidance",
+        "severity": "Low",
+        "industry": "Construction",
+        "company": "National Access and Scaffolding Confederation (NASC)",
+        "location": "Unknown",
+        "summary": "Scaffolding accident rates have decreased by 16% to a record low according to the NASC report for 2024. This indicates improved safety practices among its 303 member companies.",
+        "fine": "None",
+        "lesson": "Adherence to safety guidelines and best practices in scaffolding can significantly reduce accidents."
+      },
+      "processed_at": "2025-07-05T17:28:07.339731"
+    }
+  ]
+}

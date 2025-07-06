@@ -1,0 +1,7 @@
+.env
+/db
+/LEGACY-CODE
+/static
+/safety-equipment-detection
+/gemini-search
+/.vscode

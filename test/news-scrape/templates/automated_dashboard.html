@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Health & Safety News Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+        
+        .automation-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .progress-section {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .progress-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .progress-item h3 {
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+        
+        .progress-bar {
+            background: #ecf0f1;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        .high-risk { color: #e74c3c; }
+        .medium-risk { color: #f39c12; }
+        .low-risk { color: #27ae60; }
+        .info { color: #3498db; }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background: #34495e;
+            color: white;
+            padding: 1rem 1.5rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+        }
+        
+        .chart-container {
+            grid-column: 1 / -1;
+            height: 400px;
+        }
+        
+        .articles-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .article-item {
+            border-bottom: 1px solid #eee;
+            padding: 1rem 0;
+        }
+        
+        .article-item:last-child {
+            border-bottom: none;
+        }
+        
+        .article-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+        
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .article-summary {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.4;
+        }
+        
+        .risk-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .risk-high { background-color: #e74c3c; }
+        .risk-medium { background-color: #f39c12; }
+        .risk-low { background-color: #27ae60; }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        }
+        
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        
+        .error {
+            background-color: #fff5f5;
+            border: 1px solid #feb2b2;
+            color: #c53030;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+        
+        .success {
+            background-color: #f0fff4;
+            border: 1px solid #9ae6b4;
+            color: #22543d;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .status-running { background-color: #3498db; }
+        .status-complete { background-color: #27ae60; }
+        .status-error { background-color: #e74c3c; }
+        .status-idle { background-color: #95a5a6; }
+        
+        @media (max-width: 768px) {
+            .content-grid, .progress-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .automation-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 Automated Health & Safety Dashboard</h1>
+        <p>One-click scraping, AI processing, and real-time insights</p>
+        
+        <div class="automation-controls">
+            <button class="btn btn-success" onclick="runCompleteWorkflow()" id="complete-btn">
+                🚀 Scrape & Process (Complete)
+            </button>
+            <button class="btn" onclick="startScraping()" id="scrape-btn">
+                🕷️ Scrape News Sites
+            </button>
+            <button class="btn btn-warning" onclick="startProcessing()" id="process-btn">
+                🧠 Process with AI
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="notification-container"></div>
+        
+        <!-- Progress Section -->
+        <div class="progress-section">
+            <h2>🔄 Automation Status</h2>
+            <div class="progress-grid">
+                <div class="progress-item">
+                    <h3>
+                        <span class="status-indicator" id="scrape-status-dot"></span>
+                        Web Scraping Progress
+                    </h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="scrape-progress"></div>
+                    </div>
+                    <div class="progress-text" id="scrape-message">Ready to scrape</div>
+                </div>
+                
+                <div class="progress-item">
+                    <h3>
+                        <span class="status-indicator" id="process-status-dot"></span>
+                        AI Processing Progress
+                    </h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="process-progress"></div>
+                    </div>
+                    <div class="progress-text" id="process-message">Ready to process</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number info" id="total-articles">-</div>
+                <div class="stat-label">Total Articles</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number high-risk" id="high-risk-count">-</div>
+                <div class="stat-label">High Risk Incidents</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number medium-risk" id="medium-risk-count">-</div>
+                <div class="stat-label">Medium Risk Incidents</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number low-risk" id="low-risk-count">-</div>
+                <div class="stat-label">Low Risk Incidents</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-grid">
+            <!-- Summary Card -->
+            <div class="card">
+                <div class="card-header">
+                    🎯 Executive Summary
+                    <span id="last-updated"></span>
+                </div>
+                <div class="card-content">
+                    <div id="executive-summary" class="loading">Run automation to generate summary...</div>
+                </div>
+            </div>
+
+            <!-- Industry Breakdown -->
+            <div class="card">
+                <div class="card-header">📊 Industry Breakdown</div>
+                <div class="card-content">
+                    <canvas id="industry-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Articles -->
+            <div class="card chart-container">
+                <div class="card-header">
+                    📰 Recent Articles
+                    <button class="btn btn-small" onclick="loadDashboardData()" id="refresh-btn">🔄 Refresh</button>
+                </div>
+                <div class="card-content">
+                    <div id="articles-list" class="articles-list loading">Run automation to see articles...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let industryChart = null;
+        let statusUpdateInterval = null;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+            startStatusUpdates();
+        });
+
+        // Automation functions
+        async function runCompleteWorkflow() {
+            try {
+                disableButtons();
+                showNotification('Starting complete automation workflow...', 'success');
+                
+                const response = await fetch('/api/scrape_and_process', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ max_articles: 10 })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showNotification('🚀 Automation started! Watch progress above.', 'success');
+                } else {
+                    showNotification('Error: ' + data.error, 'error');
+                    enableButtons();
+                }
+            } catch (error) {
+                showNotification('Error starting workflow: ' + error.message, 'error');
+                enableButtons();
+            }
+        }
+
+        async function startScraping() {
+            try {
+                disableButtons();
+                showNotification('Starting web scraping...', 'success');
+                
+                const response = await fetch('/api/scrape', { method: 'POST' });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showNotification('🕷️ Scraping started!', 'success');
+                } else {
+                    showNotification('Error: ' + data.error, 'error');
+                    enableButtons();
+                }
+            } catch (error) {
+                showNotification('Error starting scraping: ' + error.message, 'error');
+                enableButtons();
+            }
+        }
+
+        async function startProcessing() {
+            try {
+                disableButtons();
+                showNotification('Starting AI processing...', 'success');
+                
+                const response = await fetch('/api/process', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ max_articles: 10 })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showNotification('🧠 AI processing started!', 'success');
+                } else {
+                    showNotification('Error: ' + data.error, 'error');
+                    enableButtons();
+                }
+            } catch (error) {
+                showNotification('Error starting processing: ' + error.message, 'error');
+                enableButtons();
+            }
+        }
+
+        // Status updates
+        function startStatusUpdates() {
+            if (statusUpdateInterval) clearInterval(statusUpdateInterval);
+            
+            statusUpdateInterval = setInterval(async () => {
+                try {
+                    const response = await fetch('/api/status');
+                    const status = await response.json();
+                    
+                    updateProgressUI(status);
+                    
+                    // Always try to load latest data when processing completes
+                    if (!status.scraping.running && !status.processing.running) {
+                        if (status.scraping.progress === 100 || status.processing.progress === 100) {
+                            // Load dashboard data whenever processing finishes
+                            await loadDashboardData();
+                            enableButtons();
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching status:', error);
+                }
+            }, 2000); // Back to 2 seconds for responsive updates
+        }
+
+        function updateProgressUI(status) {
+            // Update scraping progress
+            const scrapeProgress = document.getElementById('scrape-progress');
+            const scrapeMessage = document.getElementById('scrape-message');
+            const scrapeDot = document.getElementById('scrape-status-dot');
+            
+            scrapeProgress.style.width = status.scraping.progress + '%';
+            scrapeMessage.textContent = status.scraping.message;
+            
+            if (status.scraping.running) {
+                scrapeDot.className = 'status-indicator status-running';
+            } else if (status.scraping.progress === 100) {
+                scrapeDot.className = 'status-indicator status-complete';
+            } else if (status.scraping.progress === 0 && status.scraping.last_run) {
+                scrapeDot.className = 'status-indicator status-error';
+            } else {
+                scrapeDot.className = 'status-indicator status-idle';
+            }
+            
+            // Update processing progress
+            const processProgress = document.getElementById('process-progress');
+            const processMessage = document.getElementById('process-message');
+            const processDot = document.getElementById('process-status-dot');
+            
+            processProgress.style.width = status.processing.progress + '%';
+            processMessage.textContent = status.processing.message;
+            
+            if (status.processing.running) {
+                processDot.className = 'status-indicator status-running';
+            } else if (status.processing.progress === 100) {
+                processDot.className = 'status-indicator status-complete';
+            } else if (status.processing.progress === 0 && status.processing.last_run) {
+                processDot.className = 'status-indicator status-error';
+            } else {
+                processDot.className = 'status-indicator status-idle';
+            }
+        }
+
+        async function loadDashboardData() {
+            try {
+                showLoading();
+                
+                // Load summary data
+                const summaryResponse = await fetch('/api/latest_summary');
+                
+                if (summaryResponse.ok) {
+                    const summaryData = await summaryResponse.json();
+                    
+                    // Load articles
+                    const articlesResponse = await fetch('/api/articles');
+                    const articlesData = await articlesResponse.json();
+                    
+                    // Update dashboard
+                    updateStats(summaryData, articlesData);
+                    updateSummary(summaryData);
+                    updateArticlesList(articlesData.articles);
+                    updateIndustryChart(articlesData.articles);
+                    
+                    // Update last updated time
+                    const lastUpdated = document.getElementById('last-updated');
+                    lastUpdated.textContent = new Date(summaryData.processed_at).toLocaleString();
+                    
+                    hideLoading();
+                } else {
+                    // No data available yet
+                    document.getElementById('executive-summary').innerHTML = 
+                        '<p>No processed data available yet. Click "Scrape & Process" to get started!</p>';
+                    document.getElementById('articles-list').innerHTML = 
+                        '<p>No articles available yet. Run the automation to see results.</p>';
+                    hideLoading();
+                }
+                
+            } catch (error) {
+                showNotification('Error loading dashboard data: ' + error.message, 'error');
+                hideLoading();
+            }
+        }
+
+        function updateStats(summaryData, articlesData) {
+            document.getElementById('total-articles').textContent = summaryData.total_articles || 0;
+            
+            // Count severity levels more robustly
+            const articles = articlesData.articles || [];
+            const severityCounts = { critical: 0, high: 0, medium: 0, low: 0 };
+            
+            console.log('Articles to process:', articles.length);
+            
+            articles.forEach((article, index) => {
+                const summary = article.gemini_summary;
+                
+                if (summary && typeof summary === 'object') {
+                    // Handle multiple possible severity field names and formats
+                    let severity = summary['severity'] || summary['risk_level'] || '';
+                    
+                    // Clean up the severity value
+                    severity = String(severity).toLowerCase()
+                        .replace('risk', '')
+                        .replace('severity', '')
+                        .replace('level', '')
+                        .trim();
+                    
+                    console.log(`Article ${index}: severity="${severity}"`);
+                    
+                    // Map to our categories
+                    if (severity.includes('critical')) {
+                        severityCounts.critical++;
+                    } else if (severity.includes('high')) {
+                        severityCounts.high++;
+                    } else if (severity.includes('medium')) {
+                        severityCounts.medium++;
+                    } else if (severity.includes('low')) {
+                        severityCounts.low++;
+                    }
+                } else {
+                    console.log(`Article ${index}: no valid summary`);
+                }
+            });
+            
+            console.log('Final severity counts:', severityCounts);
+            
+            // Update display - combine critical+high for "High Risk"
+            document.getElementById('high-risk-count').textContent = severityCounts.critical + severityCounts.high;
+            document.getElementById('medium-risk-count').textContent = severityCounts.medium;
+            document.getElementById('low-risk-count').textContent = severityCounts.low;
+        }
+
+        function updateSummary(summaryData) {
+            const summaryElement = document.getElementById('executive-summary');
+            
+            let summaryText = summaryData.dashboard_summary || 'No summary available yet.';
+            
+            // Clean up any residual JSON formatting
+            if (summaryText.includes('```')) {
+                // Extract text from markdown code blocks
+                const lines = summaryText.split('\n');
+                const textLines = lines.filter(line => 
+                    !line.includes('```') && 
+                    !line.trim().startsWith('{') && 
+                    !line.trim().startsWith('}') &&
+                    line.trim().length > 0
+                );
+                summaryText = textLines.join(' ').trim();
+            }
+            
+            // If it still looks like JSON, try to parse and extract readable parts
+            try {
+                if (summaryText.trim().startsWith('{')) {
+                    const parsed = JSON.parse(summaryText);
+                    let readable = '';
+                    
+                    if (parsed.headline) {
+                        readable += `<p><strong>${parsed.headline}</strong></p>`;
+                    }
+                    if (parsed.overall_trends) {
+                        readable += `<p>${parsed.overall_trends}</p>`;
+                    }
+                    if (parsed.critical_trends && Array.isArray(parsed.critical_trends)) {
+                        readable += `<p><strong>Key Trends:</strong></p><ul>`;
+                        parsed.critical_trends.forEach(trend => readable += `<li>${trend}</li>`);
+                        readable += `</ul>`;
+                    }
+                    if (parsed.recommendations && Array.isArray(parsed.recommendations)) {
+                        readable += `<p><strong>Recommendations:</strong></p><ul>`;
+                        parsed.recommendations.forEach(rec => readable += `<li>${rec}</li>`);
+                        readable += `</ul>`;
+                    }
+                    if (parsed.top_recommendations && Array.isArray(parsed.top_recommendations)) {
+                        readable += `<p><strong>Priority Actions:</strong></p><ul>`;
+                        parsed.top_recommendations.forEach(rec => readable += `<li>${rec}</li>`);
+                        readable += `</ul>`;
+                    }
+                    
+                    summaryElement.innerHTML = readable || `<p>${summaryText}</p>`;
+                } else {
+                    // It's plain text (good!) - format it nicely
+                    const paragraphs = summaryText.split('\n\n').filter(p => p.trim().length > 0);
+                    const formattedText = paragraphs.map(p => `<p>${p.trim()}</p>`).join('');
+                    summaryElement.innerHTML = formattedText || `<p>${summaryText}</p>`;
+                }
+            } catch (e) {
+                // Fallback - just display as paragraphs
+                const paragraphs = summaryText.split('\n\n').filter(p => p.trim().length > 0);
+                const formattedText = paragraphs.map(p => `<p>${p.trim()}</p>`).join('');
+                summaryElement.innerHTML = formattedText || `<p>${summaryText}</p>`;
+            }
+        }
+
+        function updateArticlesList(articles) {
+            const listElement = document.getElementById('articles-list');
+            
+            if (!articles || articles.length === 0) {
+                listElement.innerHTML = '<p>No articles processed yet. Run automation to see results.</p>';
+                return;
+            }
+            
+            let html = '';
+            articles.slice(0, 15).forEach((article, index) => {
+                let summary = article.gemini_summary || {};
+                
+                // Handle JSON wrapped in raw_summary
+                if (summary.raw_summary) {
+                    try {
+                        const cleaned = summary.raw_summary.replace(/```json\n|\n```/g, '');
+                        summary = JSON.parse(cleaned);
+                    } catch (e) {
+                        console.warn(`Failed to parse raw_summary for article ${index}:`, e);
+                    }
+                }
+                
+                // Extract data with fallbacks for different field names
+                let severity = summary['severity'] || summary['risk_level'] || 'Unknown';
+                let incidentType = summary['type'] || summary['incident_type'] || 'General';
+                let industry = summary['industry'] || summary['industry_sector'] || 'General';
+                let briefSummary = summary['summary'] || summary['brief_summary'] || summary['key_details'] || 'Processing...';
+                let company = summary['company'] || summary['company_name'] || 'Unknown';
+                let location = summary['location'] || 'Unknown';
+                let fineAmount = summary['fine'] || summary['fine_amount'] || '';
+                let safetyLesson = summary['lesson'] || summary['safety_lesson'] || '';
+                
+                // Clean up data
+                severity = String(severity).replace(' Risk', '').replace(' Severity', '').trim();
+                if (company === 'Unknown' || company === 'Not specified') company = 'Company not specified';
+                if (location === 'Unknown' || location === 'Not specified') location = 'Location not specified';
+                if (fineAmount === 'None' || fineAmount === 'Unknown') fineAmount = '';
+                
+                // Color code by severity
+                let severityClass = 'risk-low';
+                let severityIcon = '🟢';
+                let borderColor = '#27ae60';
+                
+                const severityLower = severity.toLowerCase();
+                
+                if (severityLower.includes('critical')) {
+                    severityClass = 'risk-high';
+                    severityIcon = '🔴';
+                    borderColor = '#e74c3c';
+                } else if (severityLower.includes('high')) {
+                    severityClass = 'risk-high';  
+                    severityIcon = '🟠';
+                    borderColor = '#e74c3c';
+                } else if (severityLower.includes('medium')) {
+                    severityClass = 'risk-medium';
+                    severityIcon = '🟡';
+                    borderColor = '#f39c12';
+                }
+                
+                html += `
+                    <div class="article-item" style="border-left: 4px solid ${borderColor}; margin-bottom: 1rem;">
+                        <div class="article-title">${article.title}</div>
+                        <div class="article-meta">
+                            <span>🏢 ${company} | 📍 ${location} | 🏭 ${industry}</span>
+                            <span class="risk-badge ${severityClass}">${severityIcon} ${severity}</span>
+                        </div>
+                        <div style="margin: 0.5rem 0; padding: 0.5rem; background: #f8f9fa; border-radius: 4px;">
+                            <strong>${incidentType}:</strong> ${briefSummary}
+                        </div>
+                        ${fineAmount ? `<div style="font-size: 0.9rem; color: #e74c3c; margin-top: 0.5rem;"><strong>💰 Fine:</strong> ${fineAmount}</div>` : ''}
+                        ${safetyLesson ? `<div style="font-size: 0.9rem; color: #2c3e50; margin-top: 0.5rem;"><strong>📚 Lesson:</strong> ${safetyLesson}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            listElement.innerHTML = html;
+        }
+
+        function updateIndustryChart(articles) {
+            const ctx = document.getElementById('industry-chart').getContext('2d');
+            
+            // Count articles by industry (using new field name)
+            const industries = {};
+            articles.forEach(article => {
+                const summary = article.gemini_summary || {};
+                const industry = summary['industry'] || summary['industry_sector'] || 'Unknown';
+                industries[industry] = (industries[industry] || 0) + 1;
+            });
+            
+            const labels = Object.keys(industries);
+            const data = Object.values(industries);
+            const colors = [
+                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', 
+                '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'
+            ];
+            
+            if (industryChart) {
+                industryChart.destroy();
+            }
+            
+            if (labels.length === 0) {
+                ctx.font = '16px Arial';
+                ctx.fillStyle = '#666';
+                ctx.textAlign = 'center';
+                ctx.fillText('No data available yet', ctx.canvas.width / 2, ctx.canvas.height / 2);
+                return;
+            }
+            
+            industryChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors.slice(0, labels.length),
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${value} incidents (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // UI Helper functions
+        function disableButtons() {
+            document.getElementById('complete-btn').disabled = true;
+            document.getElementById('scrape-btn').disabled = true;
+            document.getElementById('process-btn').disabled = true;
+        }
+
+        function enableButtons() {
+            document.getElementById('complete-btn').disabled = false;
+            document.getElementById('scrape-btn').disabled = false;
+            document.getElementById('process-btn').disabled = false;
+        }
+
+        function showLoading() {
+            document.querySelectorAll('.loading').forEach(el => {
+                el.style.display = 'block';
+            });
+        }
+
+        function hideLoading() {
+            document.querySelectorAll('.loading').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notification-container');
+            const notification = document.createElement('div');
+            notification.className = type;
+            notification.innerHTML = message;
+            
+            container.appendChild(notification);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 5000);
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (statusUpdateInterval) {
+                clearInterval(statusUpdateInterval);
+            }
+        });
+    </script>
+</body>
+</html>

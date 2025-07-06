@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSSE National Portal Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @keyframes ping {
+            75%, 100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(-25%);
+                animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+            }
+            50% {
+                transform: translateY(0);
+                animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            }
+        }
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: .5;
+            }
+        }
+        .animate-ping {
+            animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        .animate-bounce {
+            animation: bounce 1s infinite;
+        }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        .animation-delay-500 {
+            animation-delay: 0.5s;
+        }
+        .animation-delay-1000 {
+            animation-delay: 1s;
+        }
+        .severity-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .severity-critical { background-color: #fca5a5; color: #7f1d1d; }
+        .severity-high { background-color: #fed7aa; color: #9a3412; }
+        .severity-medium { background-color: #fde68a; color: #92400e; }
+        .severity-low { background-color: #bbf7d0; color: #166534; }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                        <h1 class="text-xl font-bold text-gray-900">HSSE National Portal</h1>
+                    </div>
+                </div>
+                <nav class="hidden md:flex items-center space-x-8">
+                    <button class="px-3 py-2 rounded-lg font-medium text-blue-600 bg-blue-50 transition-colors">
+                        Dashboard
+                    </button>
+                    <a href="/ai" class="px-3 py-2 rounded-lg font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                         Assistant ❇️
+                    </a>
+                    <a href="/map" class="px-3 py-2 rounded-lg font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                        Data Map
+                    </a>
+                </nav>
+                <div class="flex items-center space-x-3">
+                    <button class="p-2 text-gray-400 hover:text-gray-600 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM9 7H4l5-5v5zm6 10V7a1 1 0 00-1-1H5a1 1 0 00-1 1v10a1 1 0 001 1h9a1 1 0 001-1z"></path>
+                        </svg>
+                    </button>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-sm text-gray-700">User</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="px-6 py-8 relative">
+        <!-- Enhanced Stats Banner -->
+        {% if news_metrics %}
+        <div class="mb-6 p-4 bg-gradient-to-r from-blue-50 to-red-50 rounded-xl border-l-4 border-red-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900">Latest Industry Analysis</h3>
+                    <p class="text-sm text-gray-600">Processed {{ news_metrics.total_articles }} recent health & safety incidents</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-2xl font-bold text-red-600">{{ news_metrics.high_risk }}</div>
+                    <div class="text-xs text-gray-500">High Risk Incidents</div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Quick Actions -->
+        <section class="mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Quick Actions</h2>
+                <div class="text-sm text-gray-500">Choose the type of report you need to submit</div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Report Incident -->
+                <a href="/report" class="group relative p-6 rounded-xl border-2 border-transparent bg-red-50 hover:border-gray-200 transition-all duration-200 hover:shadow-lg transform hover:scale-105 cursor-pointer">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-3 rounded-lg bg-red-500 group-hover:scale-105 transition-transform shadow-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                            </svg>
+                        </div>
+                        <svg class="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-red-700 mb-1">Report Incident</h3>
+                    <p class="text-sm text-gray-600">Submit new safety incident</p>
+                </a>
+
+                <!-- Near Miss -->
+                <a href="safety.html" class="group relative p-6 rounded-xl border-2 border-transparent bg-yellow-50 hover:border-gray-200 transition-all duration-200 hover:shadow-lg transform hover:scale-105 cursor-pointer">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-3 rounded-lg bg-yellow-500 group-hover:scale-105 transition-transform shadow-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                        <svg class="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-yellow-700 mb-1">Near Miss</h3>
+                    <p class="text-sm text-gray-600">Report near miss event</p>
+                </a>
+
+                <!-- Safety Observation -->
+                <a href="safety.html" class="group relative p-6 rounded-xl border-2 border-transparent bg-green-50 hover:border-gray-200 transition-all duration-200 hover:shadow-lg transform hover:scale-105 cursor-pointer">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-3 rounded-lg bg-green-500 group-hover:scale-105 transition-transform shadow-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                        </div>  
+                        <svg class="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-green-700 mb-1">Safety Observation</h3>
+                    <p class="text-sm text-gray-600">Safety observation</p>
+                </a>
+
+                <!-- Environmental -->
+                <button class="group relative p-6 rounded-xl border-2 border-transparent bg-blue-50 hover:border-gray-200 transition-all duration-200 hover:shadow-lg transform hover:scale-105">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-3 rounded-lg bg-blue-500 group-hover:scale-105 transition-transform shadow-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                            </svg>
+                        </div>
+                        <svg class="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-blue-700 mb-1">Environmental</h3>
+                    <p class="text-sm text-gray-600">Environmental incident</p>
+                </button>
+            </div>
+        </section>
+
+        <!-- Mobile Report Bubble -->
+        <div class="fixed bottom-6 right-6 lg:hidden z-50">
+            <div class="relative">
+                <a href="/report">
+                    <button class="w-20 h-20 bg-gradient-to-br from-red-500 to-orange-600 text-white rounded-full shadow-2xl hover:scale-110 transition-all duration-200 flex items-center justify-center">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </button>
+                </a>
+                <div class="absolute -top-1 -right-1 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center animate-bounce">
+                    <span class="text-red-600 font-bold text-xs">!</span>
+                </div>
+                <div class="absolute inset-0 rounded-full border-4 border-red-400 animate-ping opacity-30"></div>
+            </div>
+        </div>
+
+        <!-- Enhanced Metrics Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <!-- National HSSE Metrics -->
+            <div class="lg:col-span-2">
+                <h2 class="text-xl font-bold text-gray-900 mb-6">National HSSE Metrics</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
+                        <div class="text-3xl font-bold text-red-600 mb-1">{{ metrics.total_incidents or 0 }}</div>
+                        <div class="text-sm font-medium text-gray-900 mb-2">Total Incidents</div>
+                        <div class="text-xs text-gray-500">{{ metrics.incidents_change or '+0%' }} vs last month</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
+                        <div class="text-3xl font-bold text-yellow-600 mb-1">{{ metrics.near_misses or 0 }}</div>
+                        <div class="text-sm font-medium text-gray-900 mb-2">Near Misses</div>
+                        <div class="text-xs text-gray-500">{{ metrics.near_misses_change or '+0%' }} vs last month</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
+                        <div class="text-3xl font-bold text-green-600 mb-1">{{ metrics.safety_observations or 0 }}</div>
+                        <div class="text-sm font-medium text-gray-900 mb-2">Safety Observations</div>
+                        <div class="text-xs text-gray-500">{{ metrics.observations_change or '+0%' }} vs last month</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
+                        <div class="text-3xl font-bold text-blue-600 mb-1">{{ "%.2f"|format(metrics.ltifr or 0) }}</div>
+                        <div class="text-sm font-medium text-gray-900 mb-2">LTIFR</div>
+                        <div class="text-xs text-gray-500">{{ metrics.ltifr_change or '+0%' }} vs last month</div>
+                    </div>
+                </div>
+
+                {% if news_metrics %}
+                <!-- Industry Intelligence Section -->
+                <div class="mt-6 p-6 bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl border border-blue-200">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                        <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        Industry Intelligence
+                    </h3>
+                    <div class="grid grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-red-600">£{{ "{:,}".format(news_metrics.total_fines) }}</div>
+                            <div class="text-sm text-gray-600">Total Fines This Period</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-orange-600">{{ news_metrics.construction_incidents }}</div>
+                            <div class="text-sm text-gray-600">Construction Incidents</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-blue-600">{{ news_metrics.total_articles }}</div>
+                            <div class="text-sm text-gray-600">Reports Analyzed</div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Critical Alerts -->
+            <div>
+                <h2 class="text-xl font-bold text-gray-900 mb-6">Critical Alerts</h2>
+                <div class="bg-white rounded-xl shadow-sm border">
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <div class="flex items-start space-x-3 p-3 rounded-lg bg-gray-50">
+                                <div class="w-2 h-2 rounded-full mt-2 bg-red-500"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium text-gray-900">High-risk incident reported</p>
+                                    <div class="flex items-center space-x-2 mt-1">
+                                        <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                        <span class="text-xs text-gray-500">Manufacturing Site A</span>
+                                        <span class="text-xs text-gray-400">•</span>
+                                        <span class="text-xs text-gray-500">2 hours ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-3 rounded-lg bg-gray-50">
+                                <div class="w-2 h-2 rounded-full mt-2 bg-yellow-500"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium text-gray-900">Safety audit overdue</p>
+                                    <div class="flex items-center space-x-2 mt-1">
+                                        <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                        <span class="text-xs text-gray-500">Facility B</span>
+                                        <span class="text-xs text-gray-400">•</span>
+                                        <span class="text-xs text-gray-500">1 day ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-3 rounded-lg bg-gray-50">
+                                <div class="w-2 h-2 rounded-full mt-2 bg-blue-500"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium text-gray-900">Environmental threshold exceeded</p>
+                                    <div class="flex items-center space-x-2 mt-1">
+                                        <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                        <span class="text-xs text-gray-500">Site C</span>
+                                        <span class="text-xs text-gray-400">•</span>
+                                        <span class="text-xs text-gray-500">3 days ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts and Analytics -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Enhanced Incident Trends -->
+            <div class="bg-white rounded-xl shadow-sm border">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900">Incident Trends</h3>
+                        <div class="flex items-center space-x-2">
+                            <button class="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">7D</button>
+                            <button class="px-3 py-1 text-xs text-gray-500 rounded-full">30D</button>
+                            <button class="px-3 py-1 text-xs text-gray-500 rounded-full">90D</button>
+                        </div>
+                    </div>
+                    
+                    {% if trend_data and trend_data|length > 0 %}
+                    <!-- Simple Trend Visualization -->
+                    <div class="h-64">
+                        <canvas id="incidentTrendChart" class="w-full h-full"></canvas>
+                    </div>
+                    {% else %}
+                    <div class="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
+                        <div class="text-center">
+                            <svg class="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                            </svg>
+                            <p class="text-sm text-gray-500">Loading trend data...</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Enhanced Health & Safety News -->
+            <div class="bg-white rounded-xl shadow-sm border">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Health & Safety News</h3>
+                        {% if articles %}
+                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">{{ articles|length }} Live Updates</span>
+                        {% endif %}
+                    </div>
+                    
+                    {% if articles %}
+                    <div class="space-y-4 max-h-96 overflow-y-auto">
+                        {% for article in articles %}
+                        <div class="border-b pb-4 last:border-b-0">
+                            <div class="flex items-start justify-between mb-2">
+                                <a href="{{ article.url }}" target="_blank" class="text-blue-600 font-medium hover:underline text-sm leading-tight">
+                                    {{ article.title[:80] }}{% if article.title|length > 80 %}...{% endif %}
+                                </a>
+                                {% if article.gemini_summary %}
+                                <span class="severity-badge severity-{{ article.gemini_summary.severity|lower }} ml-2 flex-shrink-0">
+                                    {{ article.gemini_summary.severity }}
+                                </span>
+                                {% endif %}
+                            </div>
+                            
+                            {% if article.gemini_summary %}
+                            <div class="text-xs text-gray-600 mb-2">
+                                <strong>{{ article.gemini_summary.type }}:</strong> 
+                                {{ article.gemini_summary.summary[:120] }}{% if article.gemini_summary.summary|length > 120 %}...{% endif %}
+                            </div>
+                            
+                            <div class="flex items-center text-xs text-gray-500 space-x-3">
+                                {% if article.gemini_summary.company and article.gemini_summary.company != 'Unknown' %}
+                                <span>🏢 {{ article.gemini_summary.company }}</span>
+                                {% endif %}
+                                {% if article.gemini_summary.location and article.gemini_summary.location != 'Unknown' %}
+                                <span>📍 {{ article.gemini_summary.location }}</span>
+                                {% endif %}
+                                {% if article.gemini_summary.fine and article.gemini_summary.fine != 'None' %}
+                                <span class="text-red-600 font-medium">💰 {{ article.gemini_summary.fine }}</span>
+                                {% endif %}
+                            </div>
+                            {% else %}
+                            <p class="text-xs text-gray-600">{{ article.content[:100] if article.content else 'Processing...' }}{% if article.content and article.content|length > 100 %}...{% endif %}</p>
+                            {% endif %}
+                            
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-xs text-gray-400">{{ article.source|title }}</span>
+                                <span class="text-xs text-gray-400">{{ article.scraped_at[:10] if article.scraped_at else '' }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    {% if news_metrics %}
+                    <div class="mt-4 pt-4 border-t">
+                        <div class="grid grid-cols-3 gap-4 text-center">
+                            <div>
+                                <div class="text-lg font-bold text-red-600">{{ news_metrics.high_risk }}</div>
+                                <div class="text-xs text-gray-500">High Risk</div>
+                            </div>
+                            <div>
+                                <div class="text-lg font-bold text-yellow-600">{{ news_metrics.medium_risk }}</div>
+                                <div class="text-xs text-gray-500">Medium Risk</div>
+                            </div>
+                            <div>
+                                <div class="text-lg font-bold text-green-600">{{ news_metrics.low_risk }}</div>
+                                <div class="text-xs text-gray-500">Low Risk</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <div class="text-center py-8">
+                        <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                        </svg>
+                        <p class="text-sm text-gray-500">No news available at the moment.</p>
+                        <p class="text-xs text-gray-400 mt-1">Check back later for updates</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Regional Breakdown -->
+            <div class="bg-white rounded-xl shadow-sm border">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6">Regional Breakdown</h3>
+                    <div class="space-y-4">
+                        {% if regional_data %}
+                        {% for region in regional_data %}
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-gray-50">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-3 h-3 rounded-full bg-{{ region.color }}-500"></div>
+                                <span class="text-sm font-medium text-gray-900">{{ region.name }}</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-sm font-semibold text-gray-900">{{ region.incidents }} incidents</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="text-center py-4">
+                            <p class="text-sm text-gray-500">No regional data available</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="bg-white rounded-xl shadow-sm border">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6">Quick Stats</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between py-2">
+                            <span class="text-sm text-gray-600">Active Sites</span>
+                            <span class="text-sm font-semibold text-gray-900">{{ stats.active_sites or 0 }}</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2">
+                            <span class="text-sm text-gray-600">Total Employees</span>
+                            <span class="text-sm font-semibold text-gray-900">{{ "{:,}".format(stats.total_employees or 0) }}</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2">
+                            <span class="text-sm text-gray-600">Safety Officers</span>
+                            <span class="text-sm font-semibold text-gray-900">{{ stats.safety_officers or 0 }}</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2">
+                            <span class="text-sm text-gray-600">Training Sessions</span>
+                            <span class="text-sm font-semibold text-gray-900">{{ stats.training_sessions or 0 }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Chart Initialization Script -->
+    <script>
+        // Initialize incident trend chart if data is available
+        {% if trend_data %}
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('incidentTrendChart');
+            if (ctx) {
+                const trendData = {{ trend_data | tojson }};
+                
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: trendData.map(d => d.date),
+                        datasets: [{
+                            label: 'Daily Incidents',
+                            data: trendData.map(d => d.incidents),
+                            borderColor: 'rgb(239, 68, 68)',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            },
+                            x: {
+                                display: true
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        {% endif %}
+
+        // Auto-refresh news data every 5 minutes
+        setInterval(function() {
+            fetch('/api/news-data')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('News data updated:', data.timestamp);
+                        // Could implement live updates here
+                    }
+                })
+                .catch(error => console.log('Error refreshing data:', error));
+        }, 300000); // 5 minutes
+
+        // Optional: Add smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Optional: Add loading states for better UX
+        window.addEventListener('load', function() {
+            document.body.classList.add('loaded');
+            console.log('HSSE Dashboard loaded successfully');
+        });
+    </script>
+</body>
+</html>

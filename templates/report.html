@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergency Fatality Report</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Scrollable dropdown */
+    #companyDropdownList { max-height: 150px; overflow-y: auto; }
+    
+    /* Loading spinner */
+    .spinner {
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #3498db;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .soundwave {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 10px;
+}
+
+.soundwave div {
+  width: 3px;
+  height: 10px;
+  background: white;
+  transform-origin: bottom;
+  transition: transform 0.1s ease;
+}
+
+.soundwave div:nth-child(1) { animation-delay: 0s; }
+.soundwave div:nth-child(2) { animation-delay: 0.1s; }
+.soundwave div:nth-child(3) { animation-delay: 0.2s; }
+.soundwave div:nth-child(4) { animation-delay: 0.3s; }
+.soundwave div:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes pulse {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(2); }
+}
+
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50 py-8 px-4">
+  <div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-4">
+        <!-- Back Button -->
+        <button onclick="history.back()" class="group flex items-center justify-center w-12 h-12 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600 group-hover:text-gray-800 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+        </button>
+        
+        <!-- Hazard Sign -->
+        <div class="flex items-center justify-center w-12 h-12 bg-red-600 rounded-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Emergency Fatality Report</h1>
+          <p class="text-gray-600">Critical incident reporting – immediate attention required</p>
+        </div>
+      </div>
+      <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg">
+        <div class="flex items-start">
+          <div class="w-5 h-5 text-red-400 mt-0.5 mr-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01" />
+            </svg>
+          </div>
+          <div class="text-sm text-red-700">
+            <strong>URGENT:</strong> This form is for workplace fatality reporting. All information is confidential and reviewed immediately by emergency teams.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+      <form id="reportForm" method="POST" enctype="multipart/form-data" class="p-8 space-y-8">
+
+        <!-- Reporter Type -->
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Report Method</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Anonymous Report -->
+            <label class="relative cursor-pointer">
+              <input type="radio" name="reporterType" value="anonymous" class="sr-only peer" required>
+              <div class="bg-white border-2 border-gray-200 rounded-lg p-4 peer-checked:border-red-500 peer-checked:bg-red-50 hover:border-gray-300 transition-all">
+                <div class="flex items-center gap-3 mb-2">
+                  <div class="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full peer-checked:bg-red-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-600 peer-checked:text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <h4 class="font-medium text-gray-900">Anonymous</h4>
+                </div>
+                <p class="text-sm text-gray-600">Report without providing personal details. Your identity remains completely confidential.</p>
+                <div class="mt-2 text-xs text-green-600 font-medium">✓ Full confidentiality</div>
+              </div>
+            </label>
+
+            <!-- Named Report -->
+            <label class="relative cursor-pointer">
+              <input type="radio" name="reporterType" value="named" class="sr-only peer">
+              <div class="bg-white border-2 border-gray-200 rounded-lg p-4 peer-checked:border-red-500 peer-checked:bg-red-50 hover:border-gray-300 transition-all">
+                <div class="flex items-center gap-3 mb-2">
+                  <div class="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full peer-checked:bg-red-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-600 peer-checked:text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-4 0v1m4-1v1" />
+                    </svg>
+                  </div>
+                  <h4 class="font-medium text-gray-900">Named Report</h4>
+                </div>
+                <p class="text-sm text-gray-600">Provide contact details for follow-up. Allows emergency teams to reach you for clarification.</p>
+                <div class="mt-2 text-xs text-blue-600 font-medium">✓ Follow-up possible</div>
+              </div>
+            </label>
+
+            <!-- Third Party -->
+            <label class="relative cursor-pointer">
+              <input type="radio" name="reporterType" value="thirdparty" class="sr-only peer">
+              <div class="bg-white border-2 border-gray-200 rounded-lg p-4 peer-checked:border-red-500 peer-checked:bg-red-50 hover:border-gray-300 transition-all">
+                <div class="flex items-center gap-3 mb-2">
+                  <div class="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full peer-checked:bg-red-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-600 peer-checked:text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                  </div>
+                  <h4 class="font-medium text-gray-900">Third Party</h4>
+                </div>
+                <p class="text-sm text-gray-600">Reporting on behalf of someone else or as a witness. Specify your relationship to the incident.</p>
+                <div class="mt-2 text-xs text-purple-600 font-medium">✓ Witness reporting</div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Conditional Reporter Details -->
+          <div id="reporterDetails" class="mt-6 hidden">
+            <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+              <h4 class="font-medium text-gray-900 mb-3">Reporter Information</h4>
+              <div class="grid grid-cols-1 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Relationship to Incident</label>
+                  <select name="relationship" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                    <option value="">Select relationship</option>
+                    <option>Witness</option>
+                    <option>Coworker</option>
+                    <option>Supervisor</option>
+                    <option>Family member</option>
+                    <option>Emergency responder</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Incident & Industry -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Type of Incident<span class="text-red-500">*</span></label>
+            <select name="incidentType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" required>
+              <option value="">Select incident type</option>
+              <option>Fall from height</option>
+              <option>Struck by object</option>
+              <option>Machinery accident</option>
+              <option>Electrical incident</option>
+              <option>Chemical exposure</option>
+              <option>Vehicle collision</option>
+              <option>Fire/explosion</option>
+              <option>Medical emergency</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Industry<span class="text-red-500">*</span></label>
+            <select name="industry" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" required>
+              <option value="">Select industry</option>
+              <option>Construction</option>
+              <option>Manufacturing</option>
+              <option>Mining</option>
+              <option>Healthcare</option>
+              <option>Transportation</option>
+              <option>Agriculture</option>
+              <option>Energy/Utilities</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Company Name with searchable dropdown -->
+        <div class="relative">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Company Name<span class="text-red-500">*</span></label>
+          <input type="text" id="companyInput" name="companyName" placeholder="Select or search company..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" autocomplete="off" required />
+          <ul id="companyList" class="absolute z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 hidden max-h-60 overflow-auto">
+            <li class="p-2 hover:bg-gray-100 cursor-pointer">Alpha Mining Co.</li>
+            <li class="p-2 hover:bg-gray-100 cursor-pointer">Beta Construction Ltd.</li>
+            <li class="p-2 hover:bg-gray-100 cursor-pointer">Gamma Manufacturing</li>
+            <li class="p-2 hover:bg-gray-100 cursor-pointer">Delta Energy Corp.</li>
+            <li class="p-2 hover:bg-gray-100 cursor-pointer">Epsilon Transport</li>
+            <li class="p-2 hover:bg-gray-100 cursor-pointer">Zeta Agriculture</li>
+            <li class="p-2 hover:bg-gray-100 cursor-pointer">Eta Healthcare</li>
+          </ul>
+        </div>
+
+        <!-- What Happened -->
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">What Happened</h3>
+          <!-- Voice -->
+          <div class="mb-6">
+            <div class="bg-white border border-gray-200 rounded-lg p-4">
+              <button type="button" class="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+                Start Recording
+              </button>
+            </div>
+          </div>
+          <!-- Text -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Written Description<span class="text-red-500">*</span></label>
+            <div class="relative">
+              <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-3 w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h9"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4h9m-9 0v16"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h.01m1.5 0h.01m-1.5 4h.01m1.5 0h.01m-1.5 4h.01m1.5 0h.01"/>
+              </svg>
+              <textarea name="description" rows="4" class="w-full pl-12 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-vertical" placeholder="Describe what happened..." required></textarea>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Required if no voice recording is provided</p>
+          </div>
+        </div>
+
+        <!-- Photo Upload -->
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Photos (Optional)</h3>
+          <div id="photoUploadArea" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
+            <div id="uploadPrompt">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-400 mb-2 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <button type="button" onclick="document.getElementById('photoUpload').click()" class="text-red-600 font-medium">Click to upload files</button>
+              <p class="text-sm text-gray-500 mt-1">or drag and drop</p>
+              <p class="text-xs text-gray-400">PNG, JPG, PDF up to 10MB each</p>
+            </div>
+            <input id="photoUpload" type="file" name="photos" accept="image/*" multiple class="hidden" />
+          </div>
+          
+          <!-- Photo Preview Area -->
+          <div id="photoPreview" class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4 hidden">
+            <!-- Photos will be dynamically added here -->
+          </div>
+          
+          <!-- Photo Analysis Results -->
+          <div id="photoAnalysis" class="mt-4 hidden">
+            <h4 class="font-medium text-gray-900 mb-2">Safety Analysis Results</h4>
+            <div id="analysisResults" class="space-y-2">
+              <!-- Analysis results will be populated here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Location (Hidden fields for geolocation) -->
+        <input type="hidden" name="location_text" id="locationText">
+        <input type="hidden" name="latitude" id="latitude">
+        <input type="hidden" name="longitude" id="longitude">
+        <input type="hidden" name="accuracy" id="accuracy">
+
+        <!-- Actions -->
+        <div class="flex justify-end gap-4 border-t pt-6 border-gray-200">
+          <button type="reset" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">Cancel</button>
+          <button type="submit" id="submitBtn" class="px-8 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium flex items-center gap-2">
+            <span>Submit Report</span>
+            <div id="submitSpinner" class="spinner hidden"></div>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Classification Results Modal -->
+  <div id="classificationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg max-w-2xl w-full max-h-96 overflow-y-auto">
+      <div class="p-6 border-b border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900">Safety Equipment Analysis</h3>
+        <p class="text-sm text-gray-600 mt-1">Review the AI analysis of uploaded photos before submitting</p>
+      </div>
+      <div id="modalContent" class="p-6">
+        <!-- Modal content will be populated dynamically -->
+      </div>
+      <div class="flex justify-end gap-4 p-6 border-t border-gray-200">
+        <button id="continueSubmit" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium">
+          Continue with Submission
+        </button>
+        <button id="closeModal" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
+          Review Photos
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Message -->
+  <div id="successMessage" class="fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg hidden z-50">
+    <div class="flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+      <span>Report submitted successfully!</span>
+    </div>
+  </div>
+
+  <script>
+    let photoClassifications = [];
+    let hasPhotos = false;
+
+    // Get user location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        document.getElementById('latitude').value = position.coords.latitude;
+        document.getElementById('longitude').value = position.coords.longitude;
+        document.getElementById('accuracy').value = position.coords.accuracy;
+        // You can also set a text description of the location here
+      });
+    }
+
+    // Searchable company dropdown
+    const companies = Array.from(document.querySelectorAll('#companyList li')).map(li => li.innerText);
+    const input = document.getElementById('companyInput');
+    const list = document.getElementById('companyList');
+
+    input.addEventListener('focus', () => { list.classList.remove('hidden'); });
+    input.addEventListener('input', () => {
+      const filter = input.value.toLowerCase();
+      list.querySelectorAll('li').forEach(li => {
+        li.style.display = li.innerText.toLowerCase().includes(filter) ? '' : 'none';
+      });
+    });
+    list.addEventListener('click', e => {
+      if (e.target.tagName === 'LI') {
+        input.value = e.target.innerText;
+        list.classList.add('hidden');
+      }
+    });
+    document.addEventListener('click', e => {
+      if (!list.contains(e.target) && e.target !== input) {
+        list.classList.add('hidden');
+      }
+    });
+
+    // Reporter type conditional details
+    const reporterRadios = document.querySelectorAll('input[name="reporterType"]');
+    const reporterDetails = document.getElementById('reporterDetails');
+
+    reporterRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (radio.value === 'named' || radio.value === 'thirdparty') {
+          reporterDetails.classList.remove('hidden');
+          // Make relationship field required for named and third party reports
+          const relationshipSelect = reporterDetails.querySelector('select[name="relationship"]');
+          if (relationshipSelect) {
+            relationshipSelect.required = true;
+          }
+        } else {
+          reporterDetails.classList.add('hidden');
+          // Remove required attribute for anonymous reports
+          const relationshipSelect = reporterDetails.querySelector('select[name="relationship"]');
+          if (relationshipSelect) {
+            relationshipSelect.required = false;
+            relationshipSelect.value = '';
+          }
+        }
+      });
+    });
+
+    // Photo upload handling
+    const photoUpload = document.getElementById('photoUpload');
+    const photoPreview = document.getElementById('photoPreview');
+    const photoAnalysis = document.getElementById('photoAnalysis');
+    const uploadPrompt = document.getElementById('uploadPrompt');
+
+    photoUpload.addEventListener('change', handlePhotoUpload);
+
+    async function handlePhotoUpload(event) {
+      const files = Array.from(event.target.files);
+      if (files.length === 0) return;
+
+      hasPhotos = true;
+      photoPreview.classList.remove('hidden');
+      photoPreview.innerHTML = '';
+      photoClassifications = [];
+
+      // Show upload progress
+      uploadPrompt.innerHTML = `
+        <div class="flex items-center justify-center gap-2">
+          <div class="spinner"></div>
+          <span class="text-gray-600">Processing photos...</span>
+        </div>
+      `;
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        
+        // Create preview
+        const previewDiv = document.createElement('div');
+        previewDiv.className = 'relative bg-gray-100 rounded-lg overflow-hidden';
+        
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        img.className = 'w-full h-32 object-cover';
+        img.onload = () => URL.revokeObjectURL(img.src);
+        
+        const fileName = document.createElement('p');
+        fileName.className = 'text-xs text-gray-600 p-2 truncate';
+        fileName.textContent = file.name;
+        
+        previewDiv.appendChild(img);
+        previewDiv.appendChild(fileName);
+        photoPreview.appendChild(previewDiv);
+
+        // Analyze photo
+        try {
+          const classification = await analyzePhoto(file);
+          photoClassifications.push({
+            filename: file.name,
+            violations: classification.violations || ['Analysis completed with no specific results']
+          });
+        } catch (error) {
+          console.error(`Analysis failed for ${file.name}:`, error);
+          photoClassifications.push({
+            filename: file.name,
+            violations: [`Analysis failed: ${error.message}`]
+          });
+        }
+      }
+
+      // Show analysis results
+      showAnalysisResults();
+      
+      // Reset upload prompt
+      uploadPrompt.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-400 mb-2 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <button type="button" onclick="document.getElementById('photoUpload').click()" class="text-red-600 font-medium">Click to upload more files</button>
+        <p class="text-sm text-gray-500 mt-1">or drag and drop</p>
+        <p class="text-xs text-gray-400">PNG, JPG, PDF up to 10MB each</p>
+      `;
+    }
+
+    async function analyzePhoto(file) {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      try {
+        const response = await fetch('/detect-json', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+          console.error('Analysis failed:', errorData);
+          throw new Error(errorData.error || 'Analysis failed');
+        }
+
+        const result = await response.json();
+        return result;
+      } catch (error) {
+        console.error('Error analyzing photo:', error);
+        throw error;
+      }
+    }
+
+    function showAnalysisResults() {
+      if (photoClassifications.length === 0) return;
+
+      photoAnalysis.classList.remove('hidden');
+      const analysisResults = document.getElementById('analysisResults');
+      analysisResults.innerHTML = '';
+
+      photoClassifications.forEach(classification => {
+        const resultDiv = document.createElement('div');
+        resultDiv.className = 'bg-gray-50 border border-gray-200 rounded-lg p-3';
+        
+        const filename = document.createElement('p');
+        filename.className = 'font-medium text-gray-900 text-sm mb-1';
+        filename.textContent = classification.filename;
+        
+        const violations = document.createElement('div');
+        violations.className = 'flex flex-wrap gap-1';
+        
+        classification.violations.forEach(violation => {
+          const badge = document.createElement('span');
+          if (violation === 'Fully Compliant ✅') {
+            badge.className = 'inline-block px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full';
+          } else {
+            badge.className = 'inline-block px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full';
+          }
+          badge.textContent = violation;
+          violations.appendChild(badge);
+        });
+        
+        resultDiv.appendChild(filename);
+        resultDiv.appendChild(violations);
+        analysisResults.appendChild(resultDiv);
+      });
+    }
+
+    // Form submission handling
+    const reportForm = document.getElementById('reportForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const submitSpinner = document.getElementById('submitSpinner');
+    const classificationModal = document.getElementById('classificationModal');
+    const modalContent = document.getElementById('modalContent');
+    const continueSubmit = document.getElementById('continueSubmit');
+    const closeModal = document.getElementById('closeModal');
+    const successMessage = document.getElementById('successMessage');
+
+    reportForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      // If there are photos with classifications, show modal first
+      if (hasPhotos && photoClassifications.length > 0) {
+        showClassificationModal();
+        return;
+      }
+      
+      // If no photos or classifications, submit directly
+      await submitForm();
+    });
+
+    function showClassificationModal() {
+      modalContent.innerHTML = '';
+      
+      if (photoClassifications.length === 0) {
+        modalContent.innerHTML = '<p class="text-gray-600">No photo analysis available.</p>';
+      } else {
+        photoClassifications.forEach(classification => {
+          const resultDiv = document.createElement('div');
+          resultDiv.className = 'mb-4 p-4 bg-gray-50 rounded-lg';
+          
+          const filename = document.createElement('h4');
+          filename.className = 'font-medium text-gray-900 mb-2';
+          filename.textContent = classification.filename;
+          
+          const violations = document.createElement('div');
+          violations.className = 'flex flex-wrap gap-2';
+          
+          classification.violations.forEach(violation => {
+            const badge = document.createElement('span');
+            if (violation === 'Fully Compliant ✅') {
+              badge.className = 'inline-block px-3 py-1 text-sm bg-green-100 text-green-800 rounded-full';
+            } else {
+              badge.className = 'inline-block px-3 py-1 text-sm bg-red-100 text-red-800 rounded-full';
+            }
+            badge.textContent = violation;
+            violations.appendChild(badge);
+          });
+          
+          resultDiv.appendChild(filename);
+          resultDiv.appendChild(violations);
+          modalContent.appendChild(resultDiv);
+        });
+      }
+      
+      classificationModal.classList.remove('hidden');
+    }
+
+    continueSubmit.addEventListener('click', async function() {
+      classificationModal.classList.add('hidden');
+      await submitForm();
+    });
+
+    closeModal.addEventListener('click', function() {
+      classificationModal.classList.add('hidden');
+    });
+
+    async function submitForm() {
+      // Show loading state
+      submitBtn.disabled = true;
+      submitSpinner.classList.remove('hidden');
+      submitBtn.querySelector('span').textContent = 'Submitting...';
+
+      try {
+        const formData = new FormData(reportForm);
+        
+        const response = await fetch('/report', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          // Show success message
+          successMessage.classList.remove('hidden');
+          setTimeout(() => {
+            successMessage.classList.add('hidden');
+          }, 5000);
+          
+          // Reset form
+          reportForm.reset();
+          photoPreview.classList.add('hidden');
+          photoAnalysis.classList.add('hidden');
+          reporterDetails.classList.add('hidden');
+          photoClassifications = [];
+          hasPhotos = false;
+          
+          // Reset upload prompt
+          uploadPrompt.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-400 mb-2 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <button type="button" onclick="document.getElementById('photoUpload').click()" class="text-red-600 font-medium">Click to upload files</button>
+            <p class="text-sm text-gray-500 mt-1">or drag and drop</p>
+            <p class="text-xs text-gray-400">PNG, JPG, PDF up to 10MB each</p>
+          `;
+          
+        } else {
+          throw new Error('Failed to submit report');
+        }
+      } catch (error) {
+        alert('Error submitting report. Please try again.');
+        console.error('Submission error:', error);
+      } finally {
+        // Reset button state
+        submitBtn.disabled = false;
+        submitSpinner.classList.add('hidden');
+        submitBtn.querySelector('span').textContent = 'Submit Report';
+      }
+    }
+
+    // Drag and drop functionality
+    const photoUploadArea = document.getElementById('photoUploadArea');
+    
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      photoUploadArea.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      photoUploadArea.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      photoUploadArea.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight(e) {
+      photoUploadArea.classList.add('border-red-400', 'bg-red-50');
+    }
+
+    function unhighlight(e) {
+      photoUploadArea.classList.remove('border-red-400', 'bg-red-50');
+    }
+
+    photoUploadArea.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      
+      photoUpload.files = files;
+      handlePhotoUpload({ target: { files: files } });
+    }
+  </script>
+  <script>
+
+  let audioStream;
+  let audioContext;
+  let analyser;
+  let dataArray;
+  let animationFrameId;
+
+  async function startMicVisualizer() {
+  try {
+    audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const source = audioContext.createMediaStreamSource(audioStream);
+    analyser = audioContext.createAnalyser();
+    source.connect(analyser);
+    analyser.fftSize = 64;
+    const bufferLength = analyser.frequencyBinCount;
+    dataArray = new Uint8Array(bufferLength);
+
+    const bars = document.querySelectorAll('#liveWave div');
+
+    function animate() {
+      analyser.getByteFrequencyData(dataArray);
+      for (let i = 0; i < bars.length; i++) {
+        const scale = (dataArray[i] / 255) * 2;
+        bars[i].style.transform = `scaleY(${scale.toFixed(2)})`;
+      }
+      animationFrameId = requestAnimationFrame(animate);
+    }
+
+    animate();
+  } catch (err) {
+    console.error('Mic visualizer error:', err);
+  }
+}
+
+function stopMicVisualizer() {
+  if (audioStream) {
+    const tracks = audioStream.getTracks();
+    tracks.forEach(track => track.stop());
+  }
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+  }
+  if (audioContext) {
+    audioContext.close();
+  }
+}
+
+
+  const startRecordBtn = document.querySelector('button:has(svg path[d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"])');
+  const descriptionBox = document.querySelector('textarea[name="description"]');
+
+  let recognition;
+  let isRecording = false;
+
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    recognition.onresult = function(event) {
+      let finalTranscript = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        if (event.results[i].isFinal) {
+          finalTranscript += event.results[i][0].transcript;
+        }
+      }
+      if (finalTranscript.trim()) {
+        descriptionBox.value += (descriptionBox.value ? ' ' : '') + finalTranscript.trim();
+      }
+    };
+
+    recognition.onerror = function(event) {
+      alert('Speech recognition error: ' + event.error);
+      stopRecording();
+    };
+
+    recognition.onend = function() {
+      if (isRecording) stopRecording();
+    };
+
+    function getSoundwaveHTML() {
+      return `
+        <div id="liveWave" class="soundwave">
+          <div></div><div></div><div></div><div></div><div></div>
+        </div>
+      `;
+    }
+
+    function startRecording() {
+  recognition.start();
+  isRecording = true;
+  startRecordBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+  startRecordBtn.classList.add('bg-red-600', 'hover:bg-red-700');
+  startRecordBtn.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+    Stop Recording
+    ${getSoundwaveHTML()}
+  `;
+  startMicVisualizer(); // 👈 Add this
+}
+
+function stopRecording() {
+  recognition.stop();
+  stopMicVisualizer(); // 👈 Add this
+  isRecording = false;
+  startRecordBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+  startRecordBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+  startRecordBtn.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+    </svg>
+    Start Recording`;
+}
+
+
+    startRecordBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+    startRecordBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+
+    startRecordBtn.addEventListener('click', () => {
+      if (!isRecording) startRecording();
+      else stopRecording();
+    });
+  } else {
+    startRecordBtn.disabled = true;
+    startRecordBtn.innerHTML += ' (Speech not supported)';
+  }
+</script>
+
+
+
+</body>
+</html>

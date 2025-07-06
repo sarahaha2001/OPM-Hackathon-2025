@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_9ffc654d6068b025d128cbfb2d1522ae {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_9ffc654d6068b025d128cbfb2d1522ae" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_9ffc654d6068b025d128cbfb2d1522ae = L.map(
+                "map_9ffc654d6068b025d128cbfb2d1522ae",
+                {
+                    center: [5.5, -59.5],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 6,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+            L.control.scale().addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+
+            
+
+        
+    
+            var tile_layer_5150ac23bc1bc206fe041c3cd3bad361 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_5150ac23bc1bc206fe041c3cd3bad361.addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var tile_layer_ed1dd3e7950494d05cd291394287d375 = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 18,
+  "maxNativeZoom": 18,
+  "noWrap": false,
+  "attribution": "\u0026copy; OpenStreetMap contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_ed1dd3e7950494d05cd291394287d375.addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var tile_layer_40fcc1fc21ddcae3bb479492316087bf = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 18,
+  "maxNativeZoom": 18,
+  "noWrap": false,
+  "attribution": "\u0026copy; CartoDB",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_40fcc1fc21ddcae3bb479492316087bf.addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var tile_layer_8e86ad42c96a9a85a9ccf85233bbead2 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 18,
+  "maxNativeZoom": 18,
+  "noWrap": false,
+  "attribution": "\u0026copy; CartoDB",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_8e86ad42c96a9a85a9ccf85233bbead2.addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var tile_layer_59781879632f7e1edb15f95839df28ec = L.tileLayer(
+                "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 18,
+  "maxNativeZoom": 18,
+  "noWrap": false,
+  "attribution": "Map data: \u00a9 OpenStreetMap contributors, SRTM | Map style: \u00a9 OpenTopoMap (CC-BY-SA)",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_59781879632f7e1edb15f95839df28ec.addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var marker_38d813613d40a6eac6f53882bdfc1abe = L.marker(
+                [5.28623666591132, -57.133258694467855],
+                {
+}
+            ).addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var icon_1f60416eddb75ed86e639d2e7c1805af = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1fc0fdd2f593307f00cf8c62c71cba87 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_07f9ee80948232e6269fb87a9f229875 = $(`<div id="html_07f9ee80948232e6269fb87a9f229875" style="width: 100.0%; height: 100.0%;"><strong>Environmental</strong><br>Fire alarm triggered<br><small>2025-07-05T22:41:54.452149</small></div>`)[0];
+                popup_1fc0fdd2f593307f00cf8c62c71cba87.setContent(html_07f9ee80948232e6269fb87a9f229875);
+            
+        
+
+        marker_38d813613d40a6eac6f53882bdfc1abe.bindPopup(popup_1fc0fdd2f593307f00cf8c62c71cba87)
+        ;
+
+        
+    
+    
+                marker_38d813613d40a6eac6f53882bdfc1abe.setIcon(icon_1f60416eddb75ed86e639d2e7c1805af);
+            
+    
+            var marker_ec01e2979193ec8f7b5fbe53eb519f76 = L.marker(
+                [6.571963341521185, -58.93133585577266],
+                {
+}
+            ).addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var icon_52f3df93bc753bf8e27e799061ce8778 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_cf80e02c72bf7faba7445016a29e4c2b = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_0cc991c836c91f0096ae2ecca33a9269 = $(`<div id="html_0cc991c836c91f0096ae2ecca33a9269" style="width: 100.0%; height: 100.0%;"><strong>Accident</strong><br>Oil spill detected<br><small>2025-07-05T22:41:54.452182</small></div>`)[0];
+                popup_cf80e02c72bf7faba7445016a29e4c2b.setContent(html_0cc991c836c91f0096ae2ecca33a9269);
+            
+        
+
+        marker_ec01e2979193ec8f7b5fbe53eb519f76.bindPopup(popup_cf80e02c72bf7faba7445016a29e4c2b)
+        ;
+
+        
+    
+    
+                marker_ec01e2979193ec8f7b5fbe53eb519f76.setIcon(icon_52f3df93bc753bf8e27e799061ce8778);
+            
+    
+            var marker_287dec9e64666f59d57a48676f0e36d0 = L.marker(
+                [5.269238638476406, -60.62676832788448],
+                {
+}
+            ).addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var icon_e4af4ad9468ebe2f63eedff3719825f5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_22989d80e064f33e3fc3ef95315b6008 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_665e0a783411c04e06ef685c068777d8 = $(`<div id="html_665e0a783411c04e06ef685c068777d8" style="width: 100.0%; height: 100.0%;"><strong>Environmental</strong><br>Minor slip near scaffold<br><small>2025-07-05T22:41:54.452189</small></div>`)[0];
+                popup_22989d80e064f33e3fc3ef95315b6008.setContent(html_665e0a783411c04e06ef685c068777d8);
+            
+        
+
+        marker_287dec9e64666f59d57a48676f0e36d0.bindPopup(popup_22989d80e064f33e3fc3ef95315b6008)
+        ;
+
+        
+    
+    
+                marker_287dec9e64666f59d57a48676f0e36d0.setIcon(icon_e4af4ad9468ebe2f63eedff3719825f5);
+            
+    
+            var marker_4a6de6a0e371cb377a607a31e41f7f7b = L.marker(
+                [5.396324365261577, -58.08153187497036],
+                {
+}
+            ).addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var icon_4af616324ddd4346d820ebdfc6955d81 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e264591227b45529e8b8e5527aa7365a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_cb7a803962c97ddcf45157f6f569a3f0 = $(`<div id="html_cb7a803962c97ddcf45157f6f569a3f0" style="width: 100.0%; height: 100.0%;"><strong>Safety Observation</strong><br>Minor slip near scaffold<br><small>2025-07-05T22:41:54.452194</small></div>`)[0];
+                popup_e264591227b45529e8b8e5527aa7365a.setContent(html_cb7a803962c97ddcf45157f6f569a3f0);
+            
+        
+
+        marker_4a6de6a0e371cb377a607a31e41f7f7b.bindPopup(popup_e264591227b45529e8b8e5527aa7365a)
+        ;
+
+        
+    
+    
+                marker_4a6de6a0e371cb377a607a31e41f7f7b.setIcon(icon_4af616324ddd4346d820ebdfc6955d81);
+            
+    
+            var marker_6eb3be5d14274b19e2c13be36fb8d57d = L.marker(
+                [5.011148417239921, -59.414761989485065],
+                {
+}
+            ).addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var icon_9942becdf5a4db9f2ded2364207b7f39 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_bcc9c2110e69a2bab5d0c688172cb4c7 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_3874ac60d71a371b4dc2df3cf4131d3f = $(`<div id="html_3874ac60d71a371b4dc2df3cf4131d3f" style="width: 100.0%; height: 100.0%;"><strong>Near Miss</strong><br>Equipment failure<br><small>2025-07-05T22:41:54.452197</small></div>`)[0];
+                popup_bcc9c2110e69a2bab5d0c688172cb4c7.setContent(html_3874ac60d71a371b4dc2df3cf4131d3f);
+            
+        
+
+        marker_6eb3be5d14274b19e2c13be36fb8d57d.bindPopup(popup_bcc9c2110e69a2bab5d0c688172cb4c7)
+        ;
+
+        
+    
+    
+                marker_6eb3be5d14274b19e2c13be36fb8d57d.setIcon(icon_9942becdf5a4db9f2ded2364207b7f39);
+            
+    
+            var marker_5b8050251fee77f12decbdef99c6ecc1 = L.marker(
+                [5.250851570581794, -60.6124283924679],
+                {
+}
+            ).addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var icon_c48aa840b89450644ec6993048855a76 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_6b67819f2c2899a93a77861653835061 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_2ac3a5fe71e9fc9a7b23fd2df842d563 = $(`<div id="html_2ac3a5fe71e9fc9a7b23fd2df842d563" style="width: 100.0%; height: 100.0%;"><strong>Environmental</strong><br>Dust level exceeded<br><small>2025-07-05T22:41:54.452201</small></div>`)[0];
+                popup_6b67819f2c2899a93a77861653835061.setContent(html_2ac3a5fe71e9fc9a7b23fd2df842d563);
+            
+        
+
+        marker_5b8050251fee77f12decbdef99c6ecc1.bindPopup(popup_6b67819f2c2899a93a77861653835061)
+        ;
+
+        
+    
+    
+                marker_5b8050251fee77f12decbdef99c6ecc1.setIcon(icon_c48aa840b89450644ec6993048855a76);
+            
+    
+            var marker_0365c491d3aed172a850a8e4239e6131 = L.marker(
+                [6.015303070723857, -60.35296853933166],
+                {
+}
+            ).addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var icon_7a54eae3adfb25b56cfe48f15bd2b276 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_178b7c7a8dda27687aa00fbdfe2dca6a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_a2995d145c461131640d9c65416ebdfe = $(`<div id="html_a2995d145c461131640d9c65416ebdfe" style="width: 100.0%; height: 100.0%;"><strong>Environmental</strong><br>Minor slip near scaffold<br><small>2025-07-05T22:41:54.452205</small></div>`)[0];
+                popup_178b7c7a8dda27687aa00fbdfe2dca6a.setContent(html_a2995d145c461131640d9c65416ebdfe);
+            
+        
+
+        marker_0365c491d3aed172a850a8e4239e6131.bindPopup(popup_178b7c7a8dda27687aa00fbdfe2dca6a)
+        ;
+
+        
+    
+    
+                marker_0365c491d3aed172a850a8e4239e6131.setIcon(icon_7a54eae3adfb25b56cfe48f15bd2b276);
+            
+    
+            var marker_0d97e557d174c8552dc1fca5dd25166f = L.marker(
+                [5.290127898882755, -58.22936926273048],
+                {
+}
+            ).addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var icon_ac07dd3e4a0b2d332888d70c4abe33f4 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_f03962c650d3f3ac741bd1cd64ceffe2 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_93ce8cdf4945c3b7aae6aea968284a31 = $(`<div id="html_93ce8cdf4945c3b7aae6aea968284a31" style="width: 100.0%; height: 100.0%;"><strong>Accident</strong><br>Fire alarm triggered<br><small>2025-07-05T22:41:54.452208</small></div>`)[0];
+                popup_f03962c650d3f3ac741bd1cd64ceffe2.setContent(html_93ce8cdf4945c3b7aae6aea968284a31);
+            
+        
+
+        marker_0d97e557d174c8552dc1fca5dd25166f.bindPopup(popup_f03962c650d3f3ac741bd1cd64ceffe2)
+        ;
+
+        
+    
+    
+                marker_0d97e557d174c8552dc1fca5dd25166f.setIcon(icon_ac07dd3e4a0b2d332888d70c4abe33f4);
+            
+    
+            var marker_a178e22f32ff72769b18c87145edfdb1 = L.marker(
+                [6.56005630265657, -58.9321559232788],
+                {
+}
+            ).addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var icon_f8b0bb4ee2e81db256d81eab799cea70 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_37eb90c2f85f9dfac9680d8a73e6d1c6 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_7532080ffac9bc448b31d60615be6e37 = $(`<div id="html_7532080ffac9bc448b31d60615be6e37" style="width: 100.0%; height: 100.0%;"><strong>Safety Observation</strong><br>Fire alarm triggered<br><small>2025-07-05T22:41:54.452211</small></div>`)[0];
+                popup_37eb90c2f85f9dfac9680d8a73e6d1c6.setContent(html_7532080ffac9bc448b31d60615be6e37);
+            
+        
+
+        marker_a178e22f32ff72769b18c87145edfdb1.bindPopup(popup_37eb90c2f85f9dfac9680d8a73e6d1c6)
+        ;
+
+        
+    
+    
+                marker_a178e22f32ff72769b18c87145edfdb1.setIcon(icon_f8b0bb4ee2e81db256d81eab799cea70);
+            
+    
+            var marker_602b04a01a5e0fdc40ce7347e8395de7 = L.marker(
+                [6.357102752543671, -59.218945729112576],
+                {
+}
+            ).addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var icon_5496fd08cbf639063e823bb34f4d6c2f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e2192458319006b39b7183d1f0c162e3 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_3870f0121ce3dbb8c26049d7f4c66dd7 = $(`<div id="html_3870f0121ce3dbb8c26049d7f4c66dd7" style="width: 100.0%; height: 100.0%;"><strong>Environmental</strong><br>Oil spill detected<br><small>2025-07-05T22:41:54.452215</small></div>`)[0];
+                popup_e2192458319006b39b7183d1f0c162e3.setContent(html_3870f0121ce3dbb8c26049d7f4c66dd7);
+            
+        
+
+        marker_602b04a01a5e0fdc40ce7347e8395de7.bindPopup(popup_e2192458319006b39b7183d1f0c162e3)
+        ;
+
+        
+    
+    
+                marker_602b04a01a5e0fdc40ce7347e8395de7.setIcon(icon_5496fd08cbf639063e823bb34f4d6c2f);
+            
+    
+            var marker_e5b970791c3da1f26afa04b7370463aa = L.marker(
+                [6.68338923171649, -57.397189822352814],
+                {
+}
+            ).addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var icon_976817bb8766211df28727a683ff41e5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_93d748d66bea9d3c3f37caf517bf59cd = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_813abb844e401afafecf62a6f62b4a3e = $(`<div id="html_813abb844e401afafecf62a6f62b4a3e" style="width: 100.0%; height: 100.0%;"><strong>Accident</strong><br>Unsafe PPE usage<br><small>2025-07-05T22:41:54.452218</small></div>`)[0];
+                popup_93d748d66bea9d3c3f37caf517bf59cd.setContent(html_813abb844e401afafecf62a6f62b4a3e);
+            
+        
+
+        marker_e5b970791c3da1f26afa04b7370463aa.bindPopup(popup_93d748d66bea9d3c3f37caf517bf59cd)
+        ;
+
+        
+    
+    
+                marker_e5b970791c3da1f26afa04b7370463aa.setIcon(icon_976817bb8766211df28727a683ff41e5);
+            
+    
+            var marker_78ad30c04f480b4cf007cb632f7e7f0a = L.marker(
+                [5.186169416503157, -59.32311512925224],
+                {
+}
+            ).addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var icon_97e1d493d2d0258f5ee12060a6badee2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1fa3e5f788b5d04c0420f623ea9b3e4e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_9c253046799816dd4122563e40d620fb = $(`<div id="html_9c253046799816dd4122563e40d620fb" style="width: 100.0%; height: 100.0%;"><strong>Near Miss</strong><br>Minor slip near scaffold<br><small>2025-07-05T22:41:54.452221</small></div>`)[0];
+                popup_1fa3e5f788b5d04c0420f623ea9b3e4e.setContent(html_9c253046799816dd4122563e40d620fb);
+            
+        
+
+        marker_78ad30c04f480b4cf007cb632f7e7f0a.bindPopup(popup_1fa3e5f788b5d04c0420f623ea9b3e4e)
+        ;
+
+        
+    
+    
+                marker_78ad30c04f480b4cf007cb632f7e7f0a.setIcon(icon_97e1d493d2d0258f5ee12060a6badee2);
+            
+    
+            var marker_5d014af482c30e584b4ecab6ec45c96c = L.marker(
+                [6.575518084082136, -59.48804961335828],
+                {
+}
+            ).addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var icon_a043bbab5e30938a887c3d135bb11039 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_31f9557426a94abb1dbf023909037845 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_8514ed8a2369e283397bb3f712e09c32 = $(`<div id="html_8514ed8a2369e283397bb3f712e09c32" style="width: 100.0%; height: 100.0%;"><strong>Near Miss</strong><br>Unsafe PPE usage<br><small>2025-07-05T22:41:54.452225</small></div>`)[0];
+                popup_31f9557426a94abb1dbf023909037845.setContent(html_8514ed8a2369e283397bb3f712e09c32);
+            
+        
+
+        marker_5d014af482c30e584b4ecab6ec45c96c.bindPopup(popup_31f9557426a94abb1dbf023909037845)
+        ;
+
+        
+    
+    
+                marker_5d014af482c30e584b4ecab6ec45c96c.setIcon(icon_a043bbab5e30938a887c3d135bb11039);
+            
+    
+            var marker_bf04ae4088ccaaa38bbe5d8b208100e2 = L.marker(
+                [6.697861082258957, -60.30332465568668],
+                {
+}
+            ).addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var icon_ef5c0507d6d919e28c9e599b85316c1c = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_680cbbcbd6afd1e78e058cf17332b8f1 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_324bb91f4b36b6fa4b51b7da84bb123a = $(`<div id="html_324bb91f4b36b6fa4b51b7da84bb123a" style="width: 100.0%; height: 100.0%;"><strong>Safety Observation</strong><br>Fire alarm triggered<br><small>2025-07-05T22:41:54.452229</small></div>`)[0];
+                popup_680cbbcbd6afd1e78e058cf17332b8f1.setContent(html_324bb91f4b36b6fa4b51b7da84bb123a);
+            
+        
+
+        marker_bf04ae4088ccaaa38bbe5d8b208100e2.bindPopup(popup_680cbbcbd6afd1e78e058cf17332b8f1)
+        ;
+
+        
+    
+    
+                marker_bf04ae4088ccaaa38bbe5d8b208100e2.setIcon(icon_ef5c0507d6d919e28c9e599b85316c1c);
+            
+    
+            var marker_9c23d55e438df1db74dd37cb8f7c7efe = L.marker(
+                [6.828015804118093, -59.19333104929798],
+                {
+}
+            ).addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+        
+    
+            var icon_af4890a8e07ddf6af3646c2f66376ca3 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_ad347a3393c9962080eb36648d115c74 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_879ec47248ae2f32cbdd24fbd133318c = $(`<div id="html_879ec47248ae2f32cbdd24fbd133318c" style="width: 100.0%; height: 100.0%;"><strong>Accident</strong><br>Equipment failure<br><small>2025-07-05T22:41:54.452232</small></div>`)[0];
+                popup_ad347a3393c9962080eb36648d115c74.setContent(html_879ec47248ae2f32cbdd24fbd133318c);
+            
+        
+
+        marker_9c23d55e438df1db74dd37cb8f7c7efe.bindPopup(popup_ad347a3393c9962080eb36648d115c74)
+        ;
+
+        
+    
+    
+                marker_9c23d55e438df1db74dd37cb8f7c7efe.setIcon(icon_af4890a8e07ddf6af3646c2f66376ca3);
+            
+    
+            var layer_control_b0baa830df575decd195a7ecbac9ed7d_layers = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_5150ac23bc1bc206fe041c3cd3bad361,
+                    "Default" : tile_layer_ed1dd3e7950494d05cd291394287d375,
+                    "Light Mode" : tile_layer_40fcc1fc21ddcae3bb479492316087bf,
+                    "Dark Mode" : tile_layer_8e86ad42c96a9a85a9ccf85233bbead2,
+                    "Terrain" : tile_layer_59781879632f7e1edb15f95839df28ec,
+                },
+                overlays :  {
+                },
+            };
+            let layer_control_b0baa830df575decd195a7ecbac9ed7d = L.control.layers(
+                layer_control_b0baa830df575decd195a7ecbac9ed7d_layers.base_layers,
+                layer_control_b0baa830df575decd195a7ecbac9ed7d_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": false,
+  "autoZIndex": true,
+}
+            ).addTo(map_9ffc654d6068b025d128cbfb2d1522ae);
+
+        
+</script>
+</html>

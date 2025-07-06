@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HSSE Incident Map</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .map-container {
+      position: relative;
+      width: 100%;
+      height: 600px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .map-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    
+    .spinner {
+      border: 4px solid #f3f4f6;
+      border-top: 4px solid #3b82f6;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+
+  <!-- Header -->
+  <header class="bg-white shadow-sm border-b">
+    <div class="px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+          </div>
+          <h1 class="text-xl font-bold text-gray-900">HSSE National Portal</h1>
+        </div>
+        <nav class="hidden md:flex items-center space-x-8">
+          <a href="{{ url_for('home') }}" class="px-3 py-2 rounded-lg font-medium text-gray-600 hover:text-gray-900 transition-colors">Dashboard</a>
+          <a href="{{ url_for('map_view') }}" class="px-3 py-2 rounded-lg font-medium text-blue-600 bg-blue-50">Map</a>
+          <a href="{{ url_for('report') }}" class="px-3 py-2 rounded-lg font-medium text-gray-600 hover:text-gray-900 transition-colors">New Report</a>
+        </nav>
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+            </svg>
+          </div>
+          <span class="text-sm text-gray-700">User</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="px-6 py-8">
+    <!-- Page Header -->
+    <div class="mb-8">
+      <h2 class="text-3xl font-bold text-gray-900 mb-2">Interactive Incident Map</h2>
+      <p class="text-gray-600 mb-4">Explore incident reports geographically across regions with real-time data from our database.</p>
+      
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-lg p-4 shadow-sm border">
+          <div class="flex items-center">
+            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Total Mapped</p>
+              <p class="text-xl font-semibold text-gray-900">{{ incident_count or 0 }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg p-4 shadow-sm border">
+          <div class="flex items-center">
+            <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center mr-3">
+              <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">High Priority</p>
+              <p class="text-xl font-semibold text-gray-900">{{ (incident_count * 0.2) | int }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg p-4 shadow-sm border">
+          <div class="flex items-center">
+            <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+              <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Resolved</p>
+              <p class="text-xl font-semibold text-gray-900">{{ (incident_count * 0.7) | int }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg p-4 shadow-sm border">
+          <div class="flex items-center">
+            <div class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center mr-3">
+              <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Pending</p>
+              <p class="text-xl font-semibold text-gray-900">{{ (incident_count * 0.1) | int }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map Controls -->
+    <div class="bg-white rounded-lg p-4 shadow-sm border mb-6">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center space-x-4">
+          <h3 class="text-lg font-semibold text-gray-900">Map Controls</h3>
+          <button id="refreshBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            <span>Refresh Map</span>
+          </button>
+        </div>
+        
+        <!-- Legend -->
+        <div class="flex items-center space-x-6">
+          <div class="flex items-center space-x-2">
+            <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+            <span class="text-sm text-gray-600">Accident</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <div class="w-3 h-3 bg-orange-500 rounded-full"></div>
+            <span class="text-sm text-gray-600">Near Miss</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+            <span class="text-sm text-gray-600">Environmental</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+            <span class="text-sm text-gray-600">Safety Observation</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
+            <span class="text-sm text-gray-600">Other</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map Container -->
+    <div class="bg-white rounded-xl shadow border">
+      <div class="p-4 border-b">
+        <h3 class="text-lg font-semibold text-gray-900">Live Incident Map</h3>
+        <p class="text-sm text-gray-600">Click on markers to view incident details</p>
+      </div>
+      <div class="map-container">
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay">
+          <div class="text-center">
+            <div class="spinner mb-4"></div>
+            <p class="text-gray-600">Loading incident data...</p>
+          </div>
+        </div>
+        
+        <!-- Map Iframe -->
+        <iframe 
+          id="mapFrame" 
+          src="{{ url_for('map_data') }}" 
+          class="map-iframe"
+          onload="hideLoading()"
+          onerror="showError()">
+        </iframe>
+      </div>
+    </div>
+
+    <!-- Additional Information -->
+    <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white rounded-lg p-6 shadow-sm border">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Map Features</h3>
+        <ul class="space-y-3 text-sm text-gray-600">
+          <li class="flex items-start space-x-2">
+            <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>Real-time incident data from database</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>Multiple map layers (Default, Light, Dark, Terrain)</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>Color-coded markers by incident type</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>Detailed popups with incident information</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>Geographic clustering and zoom controls</span>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="bg-white rounded-lg p-6 shadow-sm border">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">How to Use</h3>
+        <ol class="space-y-3 text-sm text-gray-600">
+          <li class="flex items-start space-x-2">
+            <span class="flex-shrink-0 w-5 h-5 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-semibold">1</span>
+            <span>Use the layer control (top-right) to switch between map styles</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="flex-shrink-0 w-5 h-5 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-semibold">2</span>
+            <span>Click on colored markers to view incident details</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="flex-shrink-0 w-5 h-5 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-semibold">3</span>
+            <span>Use mouse wheel or +/- buttons to zoom in/out</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="flex-shrink-0 w-5 h-5 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-semibold">4</span>
+            <span>Click and drag to pan around the map</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="flex-shrink-0 w-5 h-5 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-semibold">5</span>
+            <span>Use the refresh button to reload latest data</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function hideLoading() {
+      const overlay = document.getElementById('loadingOverlay');
+      if (overlay) {
+        overlay.style.display = 'none';
+      }
+    }
+    
+    function showError() {
+      const overlay = document.getElementById('loadingOverlay');
+      if (overlay) {
+        overlay.innerHTML = `
+          <div class="text-center">
+            <svg class="w-12 h-12 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <p class="text-gray-600">Error loading map data</p>
+            <button onclick="refreshMap()" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              Try Again
+            </button>
+          </div>
+        `;
+      }
+    }
+    
+    function refreshMap() {
+      const frame = document.getElementById('mapFrame');
+      const overlay = document.getElementById('loadingOverlay');
+      
+      if (overlay) {
+        overlay.style.display = 'flex';
+        overlay.innerHTML = `
+          <div class="text-center">
+            <div class="spinner mb-4"></div>
+            <p class="text-gray-600">Refreshing map data...</p>
+          </div>
+        `;
+      }
+      
+      if (frame) {
+        // Add timestamp to force refresh
+        const currentSrc = frame.src.split('?')[0];
+        frame.src = currentSrc + '?t=' + Date.now();
+      }
+    }
+    
+    // Add refresh button functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const refreshBtn = document.getElementById('refreshBtn');
+      if (refreshBtn) {
+        refreshBtn.addEventListener('click', refreshMap);
+      }
+    });
+    
+    // Auto-refresh every 5 minutes
+    setInterval(function() {
+      refreshMap();
+    }, 5 * 60 * 1000);
+  </script>
+
+</body>
+</html>
